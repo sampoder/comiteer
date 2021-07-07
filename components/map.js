@@ -16,15 +16,23 @@ export default function Home() {
     if (map.current) return // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: ('mapbox://styles/mapbox/' + (mode === 'dark' ? 'light' : 'dark') + '-v10?optimize=true'),
+      style:
+        'mapbox://styles/mapbox/' +
+        (mode === 'dark' ? 'light' : 'dark') +
+        '-v10?optimize=true',
       center: [lng, lat],
       zoom: zoom,
       innerHeight: 100,
     })
+    var marker = new mapboxgl.Marker().setLngLat([103.8229, 1.3485]).setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>")).addTo(map.current)
   })
   useEffect(() => {
     if (!map.current) return // wait for map to initialize
-    map.current.setStyle('mapbox://styles/mapbox/' + (mode === 'dark' ? 'light' : 'dark') + '-v10?optimize=true')
+    map.current.setStyle(
+      'mapbox://styles/mapbox/' +
+        (mode === 'dark' ? 'light' : 'dark') +
+        '-v10?optimize=true',
+    )
     map.current.on('move', () => {
       setLng(map.current.getCenter().lng.toFixed(4))
       setLat(map.current.getCenter().lat.toFixed(4))
@@ -33,29 +41,11 @@ export default function Home() {
   })
   return (
     <div>
-      <div className="sidebar">
-        Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-      </div>
       <div
         ref={mapContainer}
         className="map-container"
         style={{ height: '100vh' }}
       />
-      <style>{`
-      .sidebar {
-        background-color: rgba(35, 55, 75, 0.9);
-        color: #ffffff;
-        padding: 6px 12px;
-        font-family: monospace;
-        z-index: 1;
-        position: absolute;
-        top: 0;
-        left: 0;
-        margin: 12px;
-        border-radius: 4px;
-      }
-      
-      `}</style>
     </div>
   )
 }
