@@ -1,12 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react'
-import { useColorMode } from 'theme-ui'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoic2FtcG9kZXIiLCJhIjoiY2todDBzdGE1MGhtYjJxcm04d3d1eGNiZyJ9.BFl0606fHUex_oRZ7Y0Sqw'
 
 export default function Home() {
-  const [mode, setMode] = useColorMode()
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [lng, setLng] = useState(103.8229)
@@ -17,9 +15,7 @@ export default function Home() {
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style:
-        'mapbox://styles/mapbox/' +
-        (mode === 'dark' ? 'light' : 'dark') +
-        '-v10?optimize=true',
+        'mapbox://styles/mapbox/streets-v11?optimize=true',
       center: [lng, lat],
       zoom: zoom,
       innerHeight: 100,
@@ -150,11 +146,6 @@ export default function Home() {
   })
   useEffect(() => {
     if (!map.current) return // wait for map to initialize
-    map.current.setStyle(
-      'mapbox://styles/mapbox/' +
-        (mode === 'dark' ? 'light' : 'dark') +
-        '-v10?optimize=true',
-    )
     map.current.on('move', () => {
       setLng(map.current.getCenter().lng.toFixed(4))
       setLat(map.current.getCenter().lat.toFixed(4))
