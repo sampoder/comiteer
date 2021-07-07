@@ -9,7 +9,7 @@ export default function Home() {
   const map = useRef(null)
   const [lng, setLng] = useState(103.8229)
   const [lat, setLat] = useState(1.3485)
-  const [zoom, setZoom] = useState(1)
+  const [zoom, setZoom] = useState(11.08)
   useEffect(() => {
     if (map.current) return // initialize map only once
     map.current = new mapboxgl.Map({
