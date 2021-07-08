@@ -17,7 +17,7 @@ export default function Home() {
     }
   }
   return (
-    <Box as="main" sx={{ bg: '#E6E4E0', maxHeight: height }}>
+    <Box as="main" sx={{ bg: '#E6E4E0', maxHeight: height, overflow: 'hidden' }}>
       <Box
         sx={{
           position: 'absolute',
