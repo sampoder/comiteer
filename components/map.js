@@ -4,9 +4,10 @@ import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loade
 mapboxgl.accessToken =
   'pk.eyJ1Ijoic2FtcG9kZXIiLCJhIjoiY2todDBzdGE1MGhtYjJxcm04d3d1eGNiZyJ9.BFl0606fHUex_oRZ7Y0Sqw'
 
-export default function Home() {
+export default function Map({ setSelectedItem }) {
   const mapContainer = useRef(null)
   const map = useRef(null)
+  const [localItem, setLocalItem] = useState()
   const [lng, setLng] = useState(103.8229)
   const [lat, setLat] = useState(1.3485)
   const [zoom, setZoom] = useState(11.08)
@@ -14,8 +15,7 @@ export default function Home() {
     if (map.current) return // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style:
-        'mapbox://styles/mapbox/streets-v11?optimize=true',
+      style: 'mapbox://styles/mapbox/streets-v11?optimize=true',
       center: [lng, lat],
       zoom: zoom,
       minZoom: 10,
@@ -96,7 +96,8 @@ export default function Home() {
           layers: ['clusters'],
         })
         var clusterId = features[0].properties.cluster_id
-        map.current.getSource('opportunities')
+        map.current
+          .getSource('opportunities')
           .getClusterExpansionZoom(clusterId, function (err, zoom) {
             if (err) return
 
@@ -112,27 +113,7 @@ export default function Home() {
       // the location of the feature, with
       // description HTML from its properties.
       map.current.on('click', 'unclustered-point', function (e) {
-        var coordinates = e.features[0].geometry.coordinates.slice()
-        var mag = e.features[0].properties.mag
-        var tsunami
-
-        if (e.features[0].properties.tsunami === 1) {
-          tsunami = 'yes'
-        } else {
-          tsunami = 'no'
-        }
-
-        // Ensure that if the map is zoomed out such that
-        // multiple copies of the feature are visible, the
-        // popup appears over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
-        }
-
-        new mapboxgl.Popup()
-          .setLngLat(coordinates)
-          .setHTML(JSON.stringify(e.features[0].properties))
-          .addTo(map.current)
+        setSelectedItem(e.features[0].properties)
       })
 
       map.current.on('mouseenter', 'clusters', function () {
