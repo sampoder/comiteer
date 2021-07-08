@@ -15,7 +15,7 @@ export default function Home() {
         }}
       >
         <Box sx={{ bg: '#E6E4E0', boxShadow: 'card', height: '100%', p: 3 }}>
-          <Box sx={{ height: 'calc(100% - 36px)'}}>
+          <Box sx={{ height: 'calc(100% - 36px)', overflowY: 'scroll'}}>
             <Heading as="h1">Comiteer</Heading>
             <Box mt={2}>
               Explore the map of Singapore and find out what is happening in
