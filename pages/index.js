@@ -23,7 +23,7 @@ export default function Home() {
             </Box>
           </Box>
           <Box sx={{ height: '36px', borderTop: '1px solid black', pt: '6px'}}>
-            © Mapbox © OpenStreetMap
+            © Comiteer 2021
           </Box>
         </Box>
       </Box>

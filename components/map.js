@@ -160,7 +160,7 @@ export default function Home() {
       />
       <style>
         {`
-        .mapboxgl-ctrl{
+        .mapboxgl-ctrl > a{
           display: none!important; 
         }`}
       </style>
