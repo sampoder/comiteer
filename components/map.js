@@ -137,7 +137,7 @@ export default function Map({ setSelectedItem }) {
       <div
         ref={mapContainer}
         className="map-container"
-        style={{ height: '100vh' }}
+        style={{ height: 'calc(100vh - calc(100vh - 100%))' }}
       />
       <style>
         {`
