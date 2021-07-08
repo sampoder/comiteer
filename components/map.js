@@ -18,6 +18,7 @@ export default function Home() {
         'mapbox://styles/mapbox/streets-v11?optimize=true',
       center: [lng, lat],
       zoom: zoom,
+      minZoom: 10,
       innerHeight: 100,
     })
     map.current.on('load', function () {
@@ -157,6 +158,12 @@ export default function Home() {
         className="map-container"
         style={{ height: '100vh' }}
       />
+      <style>
+        {`
+        .mapboxgl-ctrl{
+          display: none!important; 
+        }`}
+      </style>
     </div>
   )
 }
