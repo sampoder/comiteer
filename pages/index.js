@@ -2,10 +2,9 @@ import { Button, Box, Container, Heading } from 'theme-ui'
 import Map from '../components/map'
 import { useState } from 'react'
 const title = require('title')
-import { use100vh } from 'react-div-100vh'
+import Div100vh from 'react-div-100vh'
 
 export default function Home() {
-  const height = use100vh()
   const [selectedItem, setSelectedItem] = useState(null)
   function handleSelection(value) {
     console.log(value)
@@ -17,15 +16,19 @@ export default function Home() {
     }
   }
   return (
-    <Box as="main" sx={{ bg: '#E6E4E0', maxHeight: height, overflow: 'hidden' }}>
+    <Div100vh>
+    <Box
+      as="main"
+      sx={{ bg: '#E6E4E0', maxHeight: '100vh', overflow: 'hidden' }}
+    >
       <Box
         sx={{
-          position: 'absolute',
+          position: 'fixed',
           zIndex: '999',
           height: ['20vh', '100vh'],
           width: ['100%', '400px'],
           p: [0, 3],
-          bottom: 0
+          bottom: 0,
         }}
       >
         <Box sx={{ bg: '#E6E4E0', boxShadow: 'card', height: '100%', p: 3 }}>
@@ -45,12 +48,21 @@ export default function Home() {
                 : selectedItem.description}
             </Box>
           </Box>
-          <Box sx={{ height: '36px', borderTop: '1px solid', borderColor: 'muted', color: 'muted', pt: '6px' }}>
+          <Box
+            sx={{
+              height: '36px',
+              borderTop: '1px solid',
+              borderColor: 'muted',
+              color: 'muted',
+              pt: '6px',
+            }}
+          >
             © Comiteer 2021
           </Box>
         </Box>
       </Box>
       <Map setSelectedItem={handleSelection} selectedItem={selectedItem} />
     </Box>
+    </Div100vh>
   )
 }
