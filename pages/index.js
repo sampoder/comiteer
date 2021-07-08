@@ -2,8 +2,10 @@ import { Button, Box, Container, Heading } from 'theme-ui'
 import Map from '../components/map'
 import { useState } from 'react'
 const title = require('title')
+import { use100vh } from 'react-div-100vh'
 
 export default function Home() {
+  const height = use100vh()
   const [selectedItem, setSelectedItem] = useState(null)
   function handleSelection(value) {
     console.log(value)
@@ -15,7 +17,7 @@ export default function Home() {
     }
   }
   return (
-    <Box as="main" sx={{ bg: '#E6E4E0' }}>
+    <Box as="main" sx={{ bg: '#E6E4E0', maxHeight: height }}>
       <Box
         sx={{
           position: 'absolute',
