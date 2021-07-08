@@ -5,6 +5,7 @@ import Meta from '../components/meta'
 import ColorSwitcher from '../components/color-switcher'
 import theme from '../lib/theme'
 import { ThemeProvider } from 'theme-ui'
+import Script from 'next/script'
 
 const App = ({ Component, pageProps }) => {
   return (
