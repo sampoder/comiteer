@@ -1,4 +1,4 @@
-import { Grid, Box, Container, Heading } from 'theme-ui'
+import { Grid, Box, Text, Heading } from 'theme-ui'
 import Map from '../components/map'
 import { useState } from 'react'
 const title = require('title')
@@ -46,8 +46,21 @@ export default function Home() {
           onClick={() => setEnlargedBox(!enlargedBox)}
           {...handlers}
         >
-          <Box sx={{ bg: '#E6E4E0', boxShadow: 'card', height: '100%', p: 3, borderRadius: 6 }}>
-            <Box sx={{ height: 'calc(100% - 36px)', overflowY: [enlargedBox ? 'scroll' : 'hidden', 'scroll'] }}>
+          <Box
+            sx={{
+              bg: '#E6E4E0',
+              boxShadow: 'card',
+              height: '100%',
+              p: 3,
+              borderRadius: 6,
+            }}
+          >
+            <Box
+              sx={{
+                height: 'calc(100% - 36px)',
+                overflowY: [enlargedBox ? 'scroll' : 'hidden', 'scroll'],
+              }}
+            >
               <Box
                 sx={{
                   height: [enlargedBox ? '0px' : '5px', '0px'],
@@ -59,9 +72,11 @@ export default function Home() {
                   transition: 'ease-in 0.5s',
                 }}
               ></Box>
+
               <Heading as="h1">
                 {!selectedItem ? 'Comiteer' : selectedItem.name}
               </Heading>
+
               {selectedItem && (
                 <Box mt={2} color="slate">
                   {title(selectedItem.address)}
@@ -76,7 +91,7 @@ export default function Home() {
               {selectedItem && (
                 <Grid mt={2} color="slate" gap={2} columns={2}>
                   {images.map(x => (
-                    <Box sx={{ position: 'relative'}} key={x} >
+                    <Box sx={{ position: 'relative' }} key={x}>
                       <Image src={x} width={200} height={150} />
                     </Box>
                   ))}
@@ -92,7 +107,10 @@ export default function Home() {
                 pt: '6px',
               }}
             >
-              © Comiteer 2021
+              <Box sx={{ display: 'flex' }}>
+                <Text>© Comiteer 2021</Text>
+                <Text sx={{flexGrow: 1, textAlign: 'right', display: [selectedItem == null ? 'none' : 'inline-block', 'none']}} onClick={()=>setSelectedItem(null)}>{'< '}Go Back</Text>
+              </Box>
             </Box>
           </Box>
         </Box>
