@@ -47,7 +47,7 @@ export default function Home() {
           {...handlers}
         >
           <Box sx={{ bg: '#E6E4E0', boxShadow: 'card', height: '100%', p: 3, borderRadius: 6 }}>
-            <Box sx={{ height: 'calc(100% - 36px)', overflowY: 'scroll' }}>
+            <Box sx={{ height: 'calc(100% - 36px)', overflowY: [enlargedBox ? 'scroll' : 'hidden', 'scroll'] }}>
               <Box
                 sx={{
                   height: [enlargedBox ? '0px' : '5px', '0px'],
