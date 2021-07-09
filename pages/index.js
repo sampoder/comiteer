@@ -1,9 +1,16 @@
-import { Button, Box, Container, Heading } from 'theme-ui'
+import { Grid, Box, Container, Heading } from 'theme-ui'
 import Map from '../components/map'
 import { useState } from 'react'
 const title = require('title')
 import Div100vh from 'react-div-100vh'
 import { useSwipeable } from 'react-swipeable'
+import Image from 'next/image'
+
+const images = [
+  'https://cloud-okol6b1vm-hack-club-bot.vercel.app/0gems_innovation_week-2763-min.jpg',
+  'https://cloud-okol6b1vm-hack-club-bot.vercel.app/1gems_innovation_week-2831-min.jpg',
+  'https://cloud-okol6b1vm-hack-club-bot.vercel.app/2gems_innovation_week-2754-min.jpg',
+]
 
 export default function Home() {
   const [selectedItem, setSelectedItem] = useState(null)
@@ -39,7 +46,7 @@ export default function Home() {
           onClick={() => setEnlargedBox(!enlargedBox)}
           {...handlers}
         >
-          <Box sx={{ bg: '#E6E4E0', boxShadow: 'card', height: '100%', p: 3 }}>
+          <Box sx={{ bg: '#E6E4E0', boxShadow: 'card', height: '100%', p: 3, borderRadius: 6 }}>
             <Box sx={{ height: 'calc(100% - 36px)', overflowY: 'scroll' }}>
               <Box
                 sx={{
@@ -66,6 +73,15 @@ export default function Home() {
               your area.`
                   : selectedItem.description}
               </Box>
+              {selectedItem && (
+                <Grid mt={2} color="slate" gap={2} columns={2}>
+                  {images.map(x => (
+                    <Box sx={{ position: 'relative'}} key={x} >
+                      <Image src={x} width={200} height={150} />
+                    </Box>
+                  ))}
+                </Grid>
+              )}
             </Box>
             <Box
               sx={{
@@ -83,9 +99,14 @@ export default function Home() {
         <Map setSelectedItem={handleSelection} selectedItem={selectedItem} />
       </Box>
       <style>{`
-      html {
-        overscroll-behavior-y: none!important;
-      }
+        html {
+          overscroll-behavior-y: none!important;
+        }
+        img {
+          object-fit: cover;
+          border-radius: 4px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.125);
+        }
       `}</style>
     </Div100vh>
   )
