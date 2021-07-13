@@ -18,6 +18,7 @@ model Opportunities {
   longitude      Float?
   latitude       Float?
   images         String[]
+  tags           String[]
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @default(now()) @map("updated_at")
 }

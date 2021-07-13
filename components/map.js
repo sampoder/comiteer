@@ -4,13 +4,13 @@ import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loade
 mapboxgl.accessToken =
   'pk.eyJ1Ijoic2FtcG9kZXIiLCJhIjoiY2todDBzdGE1MGhtYjJxcm04d3d1eGNiZyJ9.BFl0606fHUex_oRZ7Y0Sqw'
 
-export default function Map({ setSelectedItem }) {
-  const mapContainer = useRef(null)
+export default function Map({ setSelectedItem, selectedCategories }) {
   const map = useRef(null)
-  const [localItem, setLocalItem] = useState()
+  const mapContainer = useRef(null)
   const [lng, setLng] = useState(103.8229)
   const [lat, setLat] = useState(1.3485)
   const [zoom, setZoom] = useState(11.08)
+  const [loaded, setLoaded] = useState(false)
   useEffect(() => {
     if (map.current) return // initialize map only once
     map.current = new mapboxgl.Map({
@@ -22,17 +22,16 @@ export default function Map({ setSelectedItem }) {
       innerHeight: 100,
     })
     map.current.on('load', function () {
+      setLoaded(true)
       // Add a new source from our GeoJSON data and
       // set the 'cluster' option to true. GL-JS will
       // add the point_count property to your source data.
       map.current.addSource('opportunities', {
         type: 'geojson',
-        data: '/api/opportunities',
         cluster: true,
         clusterMaxZoom: 14, // Max zoom to cluster points on
         clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
       })
-
       map.current.addLayer({
         id: 'clusters',
         type: 'circle',
@@ -132,6 +131,11 @@ export default function Map({ setSelectedItem }) {
       setZoom(map.current.getZoom().toFixed(2))
     })
   })
+  useEffect(() => {
+    if (!map.current || !loaded) return // wait for map to initialize
+    var arrStr = encodeURIComponent(selectedCategories);
+    map.current.getSource('opportunities').setData('/api/opportunities?tags='+arrStr); 
+  }, [selectedCategories]);
   return (
     <div>
       <div

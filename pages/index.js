@@ -1,10 +1,24 @@
-import { Grid, Box, Text, Heading } from 'theme-ui'
+import { Grid, Button, Badge, Box, Text, Heading, Input } from 'theme-ui'
 import Map from '../components/map'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 const title = require('title')
 import Div100vh from 'react-div-100vh'
 import { useSwipeable } from 'react-swipeable'
 import Image from 'next/image'
+
+Array.prototype.remove = function () {
+  var what,
+    a = arguments,
+    L = a.length,
+    ax
+  while (L && this.length) {
+    what = a[--L]
+    while ((ax = this.indexOf(what)) !== -1) {
+      this.splice(ax, 1)
+    }
+  }
+  return this
+}
 
 const images = [
   'https://cloud-okol6b1vm-hack-club-bot.vercel.app/0gems_innovation_week-2763-min.jpg',
@@ -13,8 +27,24 @@ const images = [
 ]
 
 export default function Home() {
+  
+  const categories = [
+    { color: 'blue', label: 'Hands-on', key: 'handsOn' },
+    { color: 'purple', label: 'Digital', key: 'digital' },
+    { color: 'green', label: 'Environmental Awareness', key: 'environmentalAwareness' },
+    { color: 'yellow', label: 'Social Services', key: 'socialServices' },
+    { color: 'pink', label: 'Re-occurring', key: 'reOccurring' },
+    { color: 'red', label: 'Crisis Support', key: 'crisisSupport' },
+    { color: 'navy', label: 'Elderly Support', key: 'elderlySupport' },
+    { color: 'peach', label: 'COVID-19', key: 'covid19' },
+    { color: 'orange', label: 'Teaching', key: 'teaching' },
+    { color: 'brown', label: 'Outdoors', key: 'outdoors' },
+    { color: 'cyan', label: 'Disability Care', key: 'disabilityCare' },
+  ]
+  const [selectedCategories, setSelectedCategories] = useState([])
   const [selectedItem, setSelectedItem] = useState(null)
   const [enlargedBox, setEnlargedBox] = useState(false)
+  
   function handleSelection(value) {
     setEnlargedBox(true)
     if (selectedItem !== value) {
@@ -31,7 +61,7 @@ export default function Home() {
     <Div100vh>
       <Box
         as="main"
-        sx={{ bg: '#E6E4E0', maxHeight: '100vh', overflow: 'hidden' }}
+        sx={{ bg: '#E6E4E0', maxHeight: '100vh', overflowY: 'hidden' }}
       >
         <Box
           sx={{
@@ -72,7 +102,19 @@ export default function Home() {
                   transition: 'ease-in 0.5s',
                 }}
               ></Box>
-
+              <Box
+                sx={{
+                  cursor: 'pointer',
+                  borderBottom: '1px solid',
+                  borderColor: 'muted',
+                  pb: 1,
+                  mb: 1,
+                  display: ['none', selectedItem == null ? 'none' : 'block'],
+                }}
+                onClick={() => setSelectedItem(null)}
+              >
+                Home
+              </Box>
               <Heading as="h1">
                 {!selectedItem ? 'Comiteer' : selectedItem.name}
               </Heading>
@@ -97,6 +139,36 @@ export default function Home() {
                   ))}
                 </Grid>
               )}
+              {!selectedItem && (
+                <Box mt={2}>
+                  <Input
+                    placeholder="Search Opportunities"
+                    sx={{ border: '1px dashed' }}
+                  />
+                  <Box mt={2} sx={{ '> button': { m: 1, ml: 0 } }}>
+                    {categories.map(category => (
+                      <Button
+                        bg={category.color}
+                        sx={{
+                          '&:hover': { opacity: 1, transform: 'scale(1)' },
+                          opacity: selectedCategories.includes(category.key)
+                            ? 1
+                            : 0.4,
+                        }}
+                        onClick={() =>
+                          setSelectedCategories(
+                            selectedCategories.includes(category.key)
+                              ? selectedCategories.remove(category.key)
+                              : [category.key, ...selectedCategories],
+                          )
+                        }
+                      >
+                        {category.label}
+                      </Button>
+                    ))}
+                  </Box>
+                </Box>
+              )}
             </Box>
             <Box
               sx={{
@@ -109,12 +181,24 @@ export default function Home() {
             >
               <Box sx={{ display: 'flex' }}>
                 <Text>© Comiteer 2021</Text>
-                <Text sx={{flexGrow: 1, textAlign: 'right', display: [selectedItem == null ? 'none' : 'inline-block', 'none']}} onClick={()=>setSelectedItem(null)}>{'< '}Go Back</Text>
+                <Text
+                  sx={{
+                    flexGrow: 1,
+                    textAlign: 'right',
+                    display: [
+                      selectedItem == null ? 'none' : 'inline-block',
+                      'none',
+                    ],
+                  }}
+                  onClick={() => setSelectedItem(null)}
+                >
+                  {'< '}Go Back
+                </Text>
               </Box>
             </Box>
           </Box>
         </Box>
-        <Map setSelectedItem={handleSelection} selectedItem={selectedItem} />
+        <Map setSelectedItem={handleSelection} selectedItem={selectedItem} selectedCategories={selectedCategories} />
       </Box>
       <style>{`
         html {

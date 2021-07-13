@@ -6,14 +6,34 @@ let base = {
 }
 
 export default async function handler(req, res) {
-  const allOpportunities = await prisma.opportunities.findMany()
+  let tags
+  try {
+    tags = req.query.tags.split(',')
+  } catch {
+    tags = []
+  }
+  console.log(req.query)
+  const allOpportunities = await prisma.opportunities.findMany(
+    tags.length > 0
+      ? {
+          where: {
+            OR: tags.map(tag => ({
+              tags: { has: tag },
+            })),
+          },
+        }
+      : {},
+  )
   console.log(allOpportunities)
   base.features = allOpportunities.map(opportunity => ({
     type: 'Feature',
     properties: {
-      ...opportunity
+      ...opportunity,
     },
-    geometry: { type: 'Point', coordinates: [opportunity.longitude, opportunity.latitude, 0.0] },
+    geometry: {
+      type: 'Point',
+      coordinates: [opportunity.longitude, opportunity.latitude, 0.0],
+    },
   }))
   res.status(200).json(base)
 }
