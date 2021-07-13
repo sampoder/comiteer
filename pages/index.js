@@ -158,7 +158,7 @@ export default function Home() {
                         onClick={() =>
                           setSelectedCategories(
                             selectedCategories.includes(category.key)
-                              ? [Math.random(), ...selectedCategories.remove(category.key)]
+                              ? [...selectedCategories.remove(category.key)]
                               : [category.key, ...selectedCategories],
                           )
                         }
