@@ -159,7 +159,7 @@ export default function Home() {
                           setSelectedCategories(
                             selectedCategories.includes(category.key)
                               ? [Math.random(), ...selectedCategories.remove(category.key)]
-                              : [category.label, ...selectedCategories],
+                              : [category.key, ...selectedCategories],
                           )
                         }
                       >
