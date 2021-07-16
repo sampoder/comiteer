@@ -1,6 +1,6 @@
 import { Grid, Button, Badge, Box, Text, Heading, Input } from 'theme-ui'
 import Map from '../components/map'
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 const title = require('title')
 import Div100vh from 'react-div-100vh'
 import { useSwipeable } from 'react-swipeable'

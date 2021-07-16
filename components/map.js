@@ -23,14 +23,11 @@ export default function Map({ setSelectedItem, selectedCategories }) {
     })
     map.current.on('load', function () {
       setLoaded(true)
-      // Add a new source from our GeoJSON data and
-      // set the 'cluster' option to true. GL-JS will
-      // add the point_count property to your source data.
       map.current.addSource('opportunities', {
         type: 'geojson',
         cluster: true,
-        clusterMaxZoom: 14, // Max zoom to cluster points on
-        clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
+        clusterMaxZoom: 14,
+        clusterRadius: 50,
       })
       map.current.addLayer({
         id: 'clusters',
@@ -38,11 +35,6 @@ export default function Map({ setSelectedItem, selectedCategories }) {
         source: 'opportunities',
         filter: ['has', 'point_count'],
         paint: {
-          // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-          // with three steps to implement three types of circles:
-          //   * Blue, 20px circles when point count is less than 100
-          //   * Yellow, 30px circles when point count is between 100 and 750
-          //   * Pink, 40px circles when point count is greater than or equal to 750
           'circle-color': [
             'step',
             ['get', 'point_count'],
@@ -88,8 +80,6 @@ export default function Map({ setSelectedItem, selectedCategories }) {
           'circle-stroke-color': '#fff',
         },
       })
-
-      // inspect a cluster on click
       map.current.on('click', 'clusters', function (e) {
         var features = map.current.queryRenderedFeatures(e.point, {
           layers: ['clusters'],
@@ -106,11 +96,6 @@ export default function Map({ setSelectedItem, selectedCategories }) {
             })
           })
       })
-
-      // When a click event occurs on a feature in
-      // the unclustered-point layer, open a popup at
-      // the location of the feature, with
-      // description HTML from its properties.
       map.current.on('click', 'unclustered-point', function (e) {
         setSelectedItem(e.features[0].properties)
       })
