@@ -29,6 +29,6 @@
     "title": "^3.4.3"
   },
   "devDependencies": {
-    "prisma": "2.26.0"
+    "prisma": "2.27.0"
   }
 }
