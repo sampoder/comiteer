@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   } catch {
     tags = []
   }
-  console.log(req.query)
+  console.log(tags)
   const allOpportunities = await prisma.opportunities.findMany(
     tags.length > 0
       ? {

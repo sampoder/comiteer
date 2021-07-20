@@ -56,6 +56,8 @@ export default function Map({ setSelectedItem, selectedCategories }) {
         },
       })
 
+      map.current.getSource('opportunities').setData('/api/opportunities'); 
+
       map.current.addLayer({
         id: 'cluster-count',
         type: 'symbol',

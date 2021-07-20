@@ -1,10 +1,20 @@
 import { Grid, Button, Badge, Box, Text, Heading, Input } from 'theme-ui'
 import Map from '../components/map'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 const title = require('title')
 import Div100vh from 'react-div-100vh'
 import { useSwipeable } from 'react-swipeable'
 import Image from 'next/image'
+import { signIn, signOut, useSession } from 'next-auth/client'
+const md5 = require('md5')
+import dynamic from 'next/dynamic'
+const Tooltip = dynamic(() => import('react-tooltip'), { ssr: false })
+import {
+  Modal,
+  ModalTitle,
+  ModalContent,
+  ModalFooter,
+} from '@mattjennings/react-modal'
 
 Array.prototype.remove = function () {
   var what,
@@ -20,18 +30,85 @@ Array.prototype.remove = function () {
   return this
 }
 
+function validateEmail(email) {
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  return re.test(String(email).toLowerCase())
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 const images = [
   'https://cloud-okol6b1vm-hack-club-bot.vercel.app/0gems_innovation_week-2763-min.jpg',
   'https://cloud-okol6b1vm-hack-club-bot.vercel.app/1gems_innovation_week-2831-min.jpg',
   'https://cloud-okol6b1vm-hack-club-bot.vercel.app/2gems_innovation_week-2754-min.jpg',
 ]
 
+function LoginModal(props) {
+  const [buttonDetails, setButtonDetails] = useState({
+    text: 'Send Magic Link',
+    bg: 'blue',
+  })
+  const inputRefEl = useRef(null)
+  return (
+    <Modal
+      sx={{
+        borderRadius: 5,
+        p: 3,
+        px: 0,
+        width: '400px',
+        maxWidth: '90vw',
+        minHeight: '0vh',
+      }}
+      {...props}
+    >
+      <ModalContent>
+        <Input
+          sx={{ mb: 3, mt: 1 }}
+          placeholder="Email"
+          type="email"
+          ref={inputRefEl}
+        />
+      </ModalContent>
+      <ModalFooter>
+        <Button
+          sx={{ width: '100%', bg: buttonDetails.bg }}
+          onClick={async () => {
+            if (validateEmail(inputRefEl.current.value)) {
+              setButtonDetails({ text: 'Sent!', bg: 'green' })
+              signIn('email', {
+                redirect: false,
+                email: inputRefEl.current.value,
+              })
+              await sleep(3000)
+              props.setLoginIsOpen(false)
+            } else {
+              setButtonDetails({ text: 'Invalid Email', bg: 'red' })
+              await sleep(3000)
+              setButtonDetails({ text: 'Send Magic Link', bg: 'blue' })
+            }
+          }}
+        >
+          {buttonDetails.text}
+        </Button>
+      </ModalFooter>
+    </Modal>
+  )
+}
+
 export default function Home() {
-  
+  const [session, loading] = useSession()
+  const [isLoginOpen, setLoginIsOpen] = useState(false)
   const categories = [
     { color: 'blue', label: 'Hands-on', key: 'handsOn' },
     { color: 'purple', label: 'Digital', key: 'digital' },
-    { color: 'green', label: 'Environmental Awareness', key: 'environmentalAwareness' },
+    {
+      color: 'green',
+      label: 'Environmental Awareness',
+      key: 'environmentalAwareness',
+    },
     { color: 'yellow', label: 'Social Services', key: 'socialServices' },
     { color: 'pink', label: 'Re-occurring', key: 'reOccurring' },
     { color: 'red', label: 'Crisis Support', key: 'crisisSupport' },
@@ -44,7 +121,7 @@ export default function Home() {
   const [selectedCategories, setSelectedCategories] = useState([])
   const [selectedItem, setSelectedItem] = useState(null)
   const [enlargedBox, setEnlargedBox] = useState(false)
-  
+
   function handleSelection(value) {
     setEnlargedBox(true)
     if (selectedItem !== value) {
@@ -59,6 +136,7 @@ export default function Home() {
   })
   return (
     <Div100vh>
+      <LoginModal open={isLoginOpen} setLoginIsOpen={setLoginIsOpen} />
       <Box
         as="main"
         sx={{ bg: '#E6E4E0', maxHeight: '100vh', overflowY: 'hidden' }}
@@ -66,7 +144,7 @@ export default function Home() {
         <Box
           sx={{
             position: 'fixed',
-            zIndex: '999',
+            zIndex: '100',
             height: [enlargedBox ? '60vh' : '22vh', '100vh'],
             transition: 'height ease-in 0.5s',
             width: ['100%', '400px'],
@@ -118,7 +196,6 @@ export default function Home() {
               <Heading as="h1">
                 {!selectedItem ? 'Comiteer' : selectedItem.name}
               </Heading>
-
               {selectedItem && (
                 <Box mt={2} color="slate">
                   {title(selectedItem.address)}
@@ -162,6 +239,7 @@ export default function Home() {
                               : [category.key, ...selectedCategories],
                           )
                         }
+                        key={category.label}
                       >
                         {category.label}
                       </Button>
@@ -198,7 +276,48 @@ export default function Home() {
             </Box>
           </Box>
         </Box>
-        <Map setSelectedItem={handleSelection} selectedItem={selectedItem} selectedCategories={selectedCategories} />
+        <Box sx={{ position: 'fixed', top: 3, right: 3, zIndex: 100 }}>
+          {!loading ? (
+            session != null ? (
+              <>
+                <img
+                  src={`https://www.gravatar.com/avatar/${md5(
+                    session != null ? session.user.email : '',
+                  )}?d=retro`}
+                  height="40"
+                  data-tip
+                  data-for={`tip-user-info`}
+                />
+                <Tooltip
+                  id={`tip-user-info`}
+                  place="left"
+                  effect="solid"
+                  delayShow={0}
+                  delayHide={1000}
+                  clickable
+                  multiline
+                >
+                  Signed in as {session.user.email}.
+                  <hr />
+                  <Text onClick={() => signOut()} sx={{ cursor: 'pointer' }}>
+                    Click here to log out
+                  </Text>
+                </Tooltip>
+              </>
+            ) : (
+              !loading && (
+                <Button onClick={() => setLoginIsOpen(true)}>Sign In</Button>
+              )
+            )
+          ) : (
+            ''
+          )}
+        </Box>
+        <Map
+          setSelectedItem={handleSelection}
+          selectedItem={selectedItem}
+          selectedCategories={selectedCategories}
+        />
       </Box>
       <style>{`
         html {
@@ -208,6 +327,13 @@ export default function Home() {
           object-fit: cover;
           border-radius: 4px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.125);
+        }
+        .__react_component_tooltip{
+          top: 20px!important;
+          text-align: right;
+        }
+        .__react_component_tooltip::after {
+          top: 20%!important;
         }
       `}</style>
     </Div100vh>

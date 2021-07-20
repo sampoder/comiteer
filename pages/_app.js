@@ -6,10 +6,11 @@ import ColorSwitcher from '../components/color-switcher'
 import theme from '../lib/theme'
 import { ThemeProvider } from 'theme-ui'
 import Script from 'next/script'
+import { withModalTheme } from '@mattjennings/react-modal'
 
 const App = ({ Component, pageProps }) => {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={withModalTheme(theme)}>
       <Component {...pageProps} />
     </ThemeProvider>
   )
