@@ -6,9 +6,24 @@ let base = {
 }
 
 export default async function handler(req, res) {
+  const categories = [
+    'handsOn',
+    'digital',
+    'environmentalAwareness',
+    'socialServices',
+    'reOccurring',
+    'crisisSupport',
+    'elderlySupport',
+    'covid19',
+    'teaching',
+    'outdoors',
+    'disabilityCare',
+  ]
   let tags
   try {
-    tags = req.query.tags.split(',')
+    tags = req.query.tags.split(',').map(x => (categories.includes(x)? x : null)).filter(function (el) {
+      return el != null;
+    });
   } catch {
     tags = []
   }
@@ -24,7 +39,6 @@ export default async function handler(req, res) {
         }
       : {},
   )
-  console.log(allOpportunities)
   base.features = allOpportunities.map(opportunity => ({
     type: 'Feature',
     properties: {

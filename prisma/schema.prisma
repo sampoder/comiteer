@@ -11,18 +11,17 @@ generator client {
 }
 
 model Opportunities {
-  id             String        @id @default(cuid())
-  name           String?
-  description    String?  
-  address        String?   
-  longitude      Float?
-  latitude       Float?
-  images         String[]
-  tags           String[]
-  createdAt      DateTime      @default(now()) @map("created_at")
-  updatedAt      DateTime      @default(now()) @map("updated_at")
+  id          String   @id @default(cuid())
+  name        String?
+  description String?
+  address     String?
+  longitude   Float?
+  latitude    Float?
+  images      String[]
+  tags        String[]
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
 }
-
 
 model Account {
   id                 Int       @id @default(autoincrement())
@@ -57,7 +56,9 @@ model Session {
 
 model User {
   id            Int       @id @default(autoincrement())
+  nickname      String?
   name          String?
+  dob           String?
   email         String?   @unique
   emailVerified DateTime? @map(name: "email_verified")
   image         String?

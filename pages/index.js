@@ -9,12 +9,9 @@ import { signIn, signOut, useSession } from 'next-auth/client'
 const md5 = require('md5')
 import dynamic from 'next/dynamic'
 const Tooltip = dynamic(() => import('react-tooltip'), { ssr: false })
-import {
-  Modal,
-  ModalTitle,
-  ModalContent,
-  ModalFooter,
-} from '@mattjennings/react-modal'
+import { Modal, ModalContent, ModalFooter } from '@mattjennings/react-modal'
+import useSWR from 'swr'
+import { useRouter } from 'next/router'
 
 Array.prototype.remove = function () {
   var what,
@@ -80,6 +77,7 @@ function LoginModal(props) {
               setButtonDetails({ text: 'Sent!', bg: 'green' })
               signIn('email', {
                 redirect: false,
+                callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/needverify`,
                 email: inputRefEl.current.value,
               })
               await sleep(3000)
@@ -98,9 +96,13 @@ function LoginModal(props) {
   )
 }
 
+const fetcher = (...args) => fetch(...args).then(res => res.json())
+
 export default function Home() {
+  const router = useRouter()
   const [session, loading] = useSession()
   const [isLoginOpen, setLoginIsOpen] = useState(false)
+  const verifiedCheck = useSWR(`/api/verified`, fetcher)
   const categories = [
     { color: 'blue', label: 'Hands-on', key: 'handsOn' },
     { color: 'purple', label: 'Digital', key: 'digital' },
@@ -278,32 +280,38 @@ export default function Home() {
         </Box>
         <Box sx={{ position: 'fixed', top: 3, right: 3, zIndex: 100 }}>
           {!loading ? (
-            session != null ? (
-              <>
-                <img
-                  src={`https://www.gravatar.com/avatar/${md5(
-                    session != null ? session.user.email : '',
-                  )}?d=retro`}
-                  height="40"
-                  data-tip
-                  data-for={`tip-user-info`}
-                />
-                <Tooltip
-                  id={`tip-user-info`}
-                  place="left"
-                  effect="solid"
-                  delayShow={0}
-                  delayHide={1000}
-                  clickable
-                  multiline
-                >
-                  Signed in as {session.user.email}.
-                  <hr />
-                  <Text onClick={() => signOut()} sx={{ cursor: 'pointer' }}>
-                    Click here to log out
-                  </Text>
-                </Tooltip>
-              </>
+            session != null && verifiedCheck.data != null ? (
+              verifiedCheck.data.verified ? (
+                <>
+                  <img
+                    src={`https://www.gravatar.com/avatar/${md5(
+                      session != null ? session.user.email : '',
+                    )}?d=retro`}
+                    height="40"
+                    data-tip
+                    data-for={`tip-user-info`}
+                  />
+                  <Tooltip
+                    id={`tip-user-info`}
+                    place="left"
+                    effect="solid"
+                    delayShow={0}
+                    delayHide={1000}
+                    clickable
+                    multiline
+                  >
+                    Signed in as {session.user.email}.
+                    <hr />
+                    <Text onClick={() => signOut()} sx={{ cursor: 'pointer' }}>
+                      Click here to log out
+                    </Text>
+                  </Tooltip>
+                </>
+              ) : (
+                <Button onClick={() => router.push('/verify')} bg="red">
+                  Verify User
+                </Button>
+              )
             ) : (
               !loading && (
                 <Button onClick={() => setLoginIsOpen(true)}>Sign In</Button>
