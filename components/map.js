@@ -126,15 +126,8 @@ export default function Map({ setSelectedItem, selectedCategories }) {
   useEffect(() => {
     if (!map.current || !loaded) return // wait for map to initialize
     var arrStr = encodeURIComponent(selectedCategories)
-    const data2 = data
-    const fullData = data
-    let filteredData = data2
-   // console.log('Data object:')
-    console.log(data)
-    // console.log('Before filtering:')
-    // console.log(filteredData)
     map.current.getSource('opportunities').setData(
-      !filteredData
+      !data
         ? `/api/opportunities?tags=${arrStr}`
         : {
           ...data,
