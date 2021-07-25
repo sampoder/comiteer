@@ -129,17 +129,24 @@ export default function Map({ setSelectedItem, selectedCategories }) {
     const data2 = data
     const fullData = data
     let filteredData = data2
-    console.log('Data object:')
+   // console.log('Data object:')
     console.log(data)
-    console.log('Before filtering:')
-    console.log(filteredData)
-    filteredData.features = filteredData.features.filter(function (el) {
-      console.log(el.properties.tags)
-      return el.properties.tags.some(r=> selectedCategories.includes(r));
-    });
-    map.current
-      .getSource('opportunities')
-      .setData(!filteredData ? `/api/opportunities?tags=${arrStr}` : filteredData)
+    // console.log('Before filtering:')
+    // console.log(filteredData)
+    map.current.getSource('opportunities').setData(
+      !filteredData
+        ? `/api/opportunities?tags=${arrStr}`
+        : {
+          ...data,
+            features: data.features.filter(function (el) {
+              return selectedCategories.length === 0 ? true : el.properties.tags.some(r =>
+                selectedCategories.includes(r),
+              )
+            }),
+            
+          },
+    )
+    // console.log(data)
   }, [selectedCategories])
   return (
     <div>
