@@ -1,15 +1,7 @@
-import { Grid, Button, Box, Text, Heading, Input } from 'theme-ui'
-import { useState, useRef } from 'react'
+import { Grid, Button, Box, Text, Heading, Input, Flex } from 'theme-ui'
 const title = require('title')
 import { useSwipeable } from 'react-swipeable'
 import Image from 'next/image'
-import { signIn, signOut, useSession } from 'next-auth/client'
-const md5 = require('md5')
-import dynamic from 'next/dynamic'
-const Tooltip = dynamic(() => import('react-tooltip'), { ssr: false })
-import { Modal, ModalContent, ModalFooter } from '@mattjennings/react-modal'
-import useSWR from 'swr'
-import { useRouter } from 'next/router'
 
 Array.prototype.remove = function () {
   var what,
@@ -25,82 +17,23 @@ Array.prototype.remove = function () {
   return this
 }
 
-function validateEmail(email) {
-  const re =
-    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  return re.test(String(email).toLowerCase())
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
-}
-
 const images = [
   'https://cloud-okol6b1vm-hack-club-bot.vercel.app/0gems_innovation_week-2763-min.jpg',
   'https://cloud-okol6b1vm-hack-club-bot.vercel.app/1gems_innovation_week-2831-min.jpg',
   'https://cloud-okol6b1vm-hack-club-bot.vercel.app/2gems_innovation_week-2754-min.jpg',
 ]
 
-function LoginModal(props) {
-  const [buttonDetails, setButtonDetails] = useState({
-    text: 'Send Magic Link',
-    bg: 'blue',
-  })
-  const inputRefEl = useRef(null)
-  return (
-    <Modal
-      sx={{
-        borderRadius: 5,
-        p: 3,
-        px: 0,
-        width: '400px',
-        maxWidth: '90vw',
-        minHeight: '0vh',
-      }}
-      {...props}
-    >
-      <ModalContent>
-        <Input
-          sx={{ mb: 3, mt: 1 }}
-          placeholder="Email"
-          type="email"
-          ref={inputRefEl}
-        />
-      </ModalContent>
-      <ModalFooter>
-        <Button
-          sx={{ width: '100%', bg: buttonDetails.bg }}
-          onClick={async () => {
-            if (validateEmail(inputRefEl.current.value)) {
-              setButtonDetails({ text: 'Sent!', bg: 'green' })
-              signIn('email', {
-                redirect: false,
-                callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/needverify`,
-                email: inputRefEl.current.value,
-              })
-              await sleep(3000)
-              props.setLoginIsOpen(false)
-            } else {
-              setButtonDetails({ text: 'Invalid Email', bg: 'red' })
-              await sleep(3000)
-              setButtonDetails({ text: 'Send Magic Link', bg: 'blue' })
-            }
-          }}
-        >
-          {buttonDetails.text}
-        </Button>
-      </ModalFooter>
-    </Modal>
-  )
-}
-
-const fetcher = (...args) => fetch(...args).then(res => res.json())
-
-export default function Home({enlargedBox, selectedItem, selectedCategories, setEnlargedBox, setSelectedItem, setSelectedCategories}) {
-  const router = useRouter()
-  const [session, loading] = useSession()
-  const [isLoginOpen, setLoginIsOpen] = useState(false)
-  const verifiedCheck = useSWR(`/api/verified`, fetcher)
+export default function Home({
+  enlargedBox,
+  selectedItem,
+  selectedCategories,
+  setEnlargedBox,
+  setSelectedItem,
+  setSelectedCategories,
+  searchQuery,
+  setSearchQuery,
+  data,
+}) {
   const categories = [
     { color: 'blue', label: 'Hands-on', key: 'handsOn' },
     { color: 'purple', label: 'Digital', key: 'digital' },
@@ -118,17 +51,20 @@ export default function Home({enlargedBox, selectedItem, selectedCategories, set
     { color: 'brown', label: 'Outdoors', key: 'outdoors' },
     { color: 'cyan', label: 'Disability Care', key: 'disabilityCare' },
   ]
-  const handlers = useSwipeable({
+  const boxHandlers = useSwipeable({
     onSwipedUp: eventData => setEnlargedBox(true),
+  })
+
+  const headerHandlers = useSwipeable({
     onSwipedDown: eventData => setEnlargedBox(false),
   })
+
+  const unEnlargedProps = {
+    onClick: () => setEnlargedBox(true),
+  }
   return (
     <>
-      <LoginModal open={isLoginOpen} setLoginIsOpen={setLoginIsOpen} />
-      <Box
-        as="main"
-        sx={{ maxHeight: '100vh', overflowY: 'hidden' }}
-      >
+      <Box as="main" sx={{ maxHeight: '100vh', overflowY: 'hidden' }}>
         <Box
           sx={{
             position: 'fixed',
@@ -139,8 +75,8 @@ export default function Home({enlargedBox, selectedItem, selectedCategories, set
             p: [0, 3],
             bottom: 0,
           }}
-          onClick={() => setEnlargedBox(!enlargedBox)}
-          {...handlers}
+          {...(enlargedBox ? {} : unEnlargedProps)}
+          {...boxHandlers}
         >
           <Box
             sx={{
@@ -168,6 +104,7 @@ export default function Home({enlargedBox, selectedItem, selectedCategories, set
                   transition: 'ease-in 0.5s',
                 }}
               ></Box>
+              <Box {...headerHandlers}>
               <Box
                 sx={{
                   cursor: 'pointer',
@@ -195,6 +132,7 @@ export default function Home({enlargedBox, selectedItem, selectedCategories, set
               your area.`
                   : selectedItem.description}
               </Box>
+              </Box>
               {selectedItem && (
                 <Grid mt={2} color="slate" gap={2} columns={2}>
                   {images.map(x => (
@@ -205,12 +143,26 @@ export default function Home({enlargedBox, selectedItem, selectedCategories, set
                 </Grid>
               )}
               {!selectedItem && (
-                <Box mt={2}>
+                <Box my={2}>
                   <Input
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
                     placeholder="Search Opportunities"
                     sx={{ border: '1px dashed' }}
                   />
-                  <Box mt={2} sx={{ '> button': { m: 1, ml: 0 } }}>
+                  <Box
+                    as={searchQuery.trim().length === 0 ? 'div' : 'details'}
+                    mt={2}
+                    sx={{ '> button': { m: 1, ml: 0 } }}
+                  >
+                    <summary
+                      style={{
+                        display:
+                          searchQuery.trim().length === 0 ? 'none' : null,
+                      }}
+                    >
+                      Show Filters
+                    </summary>
                     {categories.map(category => (
                       <Button
                         bg={category.color}
@@ -233,6 +185,38 @@ export default function Home({enlargedBox, selectedItem, selectedCategories, set
                       </Button>
                     ))}
                   </Box>
+                  {!data
+                    ? ''
+                    : data.features
+                        .filter(function (el) {
+                          return (
+                            (selectedCategories.length === 0
+                              ? true
+                              : el.properties.tags.some(r =>
+                                  selectedCategories.includes(r),
+                                )) &&
+                            (el.properties.name
+                              .toUpperCase()
+                              .includes(searchQuery.trim().toUpperCase()) ||
+                              searchQuery.trim().length === 0)
+                          )
+                        })
+                        .map(x => (
+                          <Flex mt={3} sx={{cursor: 'pointer'}} key={x.properties.id} onClick={()=> setSelectedItem(x.properties)}>
+                            <img
+                              src={images[0]}
+                              style={{
+                                height: '64px',
+                                objectFit: 'cover',
+                                width: '64px',
+                              }}
+                            />
+                            <Box ml={'9px'} sx={{ alignSelf: 'center' }}>
+                              <Heading as="h3">{x.properties.name}</Heading>
+                              {x.properties.description}
+                            </Box>
+                          </Flex>
+                        ))}
                 </Box>
               )}
             </Box>
@@ -264,49 +248,6 @@ export default function Home({enlargedBox, selectedItem, selectedCategories, set
             </Box>
           </Box>
         </Box>
-        <Box sx={{ position: 'fixed', top: 3, right: 3, zIndex: 100 }}>
-          {!loading ? (
-            session != null && verifiedCheck.data != null ? (
-              verifiedCheck.data.verified ? (
-                <>
-                  <img
-                    src={`https://www.gravatar.com/avatar/${md5(
-                      session != null ? session.user.email : '',
-                    )}?d=retro`}
-                    height="40"
-                    data-tip
-                    data-for={`tip-user-info`}
-                  />
-                  <Tooltip
-                    id={`tip-user-info`}
-                    place="left"
-                    effect="solid"
-                    delayShow={0}
-                    delayHide={1000}
-                    clickable
-                    multiline
-                  >
-                    Signed in as {session.user.email}.
-                    <hr />
-                    <Text onClick={() => signOut()} sx={{ cursor: 'pointer' }}>
-                      Click here to log out
-                    </Text>
-                  </Tooltip>
-                </>
-              ) : (
-                <Button onClick={() => router.push('/verify')} bg="red">
-                  Verify User
-                </Button>
-              )
-            ) : (
-              !loading && (
-                <Button onClick={() => setLoginIsOpen(true)}>Sign In</Button>
-              )
-            )
-          ) : (
-            ''
-          )}
-        </Box>
       </Box>
       <style>{`
         html {
@@ -315,14 +256,6 @@ export default function Home({enlargedBox, selectedItem, selectedCategories, set
         img {
           object-fit: cover;
           border-radius: 4px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.125);
-        }
-        .__react_component_tooltip{
-          top: 20px!important;
-          text-align: right;
-        }
-        .__react_component_tooltip::after {
-          top: 20%!important;
         }
       `}</style>
     </>

@@ -1,16 +1,17 @@
 import React, { useRef, useEffect, useState } from 'react'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
-import useSWR, { mutate } from 'swr'
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoic2FtcG9kZXIiLCJhIjoiY2todDBzdGE1MGhtYjJxcm04d3d1eGNiZyJ9.BFl0606fHUex_oRZ7Y0Sqw'
 
-const fetcher = (...args) => fetch(...args).then(res => res.json())
-
-export default function Map({ setSelectedItem, selectedCategories }) {
+export default function Map({
+  setSelectedItem,
+  selectedCategories,
+  data,
+  searchQuery,
+}) {
   const map = useRef(null)
   const mapContainer = useRef(null)
-  const { data, error } = useSWR('/api/opportunities', fetcher)
   const [lng, setLng] = useState(103.8229)
   const [lat, setLat] = useState(1.3485)
   const [zoom, setZoom] = useState(11.08)
@@ -130,17 +131,24 @@ export default function Map({ setSelectedItem, selectedCategories }) {
       !data
         ? `/api/opportunities?tags=${arrStr}`
         : {
-          ...data,
+            ...data,
             features: data.features.filter(function (el) {
-              return selectedCategories.length === 0 ? true : el.properties.tags.some(r =>
-                selectedCategories.includes(r),
+              return (
+                (selectedCategories.length === 0
+                  ? true
+                  : el.properties.tags.some(r =>
+                      selectedCategories.includes(r),
+                    )) &&
+                (el.properties.name
+                  .toUpperCase()
+                  .includes(searchQuery.trim().toUpperCase()) ||
+                  searchQuery.trim().length === 0)
               )
             }),
-            
           },
     )
     // console.log(data)
-  }, [selectedCategories])
+  }, [selectedCategories, searchQuery])
   return (
     <div>
       <div
