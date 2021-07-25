@@ -96,7 +96,7 @@ function LoginModal(props) {
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
-export default function Home({enlargedBox, selectedItem, selectedCategories}) {
+export default function Home({enlargedBox, selectedItem, selectedCategories, setEnlargedBox, setSelectedItem}) {
   const router = useRouter()
   const [session, loading] = useSession()
   const [isLoginOpen, setLoginIsOpen] = useState(false)

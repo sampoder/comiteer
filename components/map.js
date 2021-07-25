@@ -1,12 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
+import useSWR from 'swr'
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoic2FtcG9kZXIiLCJhIjoiY2todDBzdGE1MGhtYjJxcm04d3d1eGNiZyJ9.BFl0606fHUex_oRZ7Y0Sqw'
 
+  const fetcher = (...args) => fetch(...args).then(res => res.json())
+
 export default function Map({ setSelectedItem, selectedCategories }) {
   const map = useRef(null)
   const mapContainer = useRef(null)
+  const {data, error} = useSWR('/api/opportunities', fetcher)
   const [lng, setLng] = useState(103.8229)
   const [lat, setLat] = useState(1.3485)
   const [zoom, setZoom] = useState(11.08)
@@ -56,7 +60,7 @@ export default function Map({ setSelectedItem, selectedCategories }) {
         },
       })
 
-      map.current.getSource('opportunities').setData('/api/opportunities'); 
+      map.current.getSource('opportunities').setData(!data ? '/api/opportunities' :data); 
 
       map.current.addLayer({
         id: 'cluster-count',
@@ -121,7 +125,7 @@ export default function Map({ setSelectedItem, selectedCategories }) {
   useEffect(() => {
     if (!map.current || !loaded) return // wait for map to initialize
     var arrStr = encodeURIComponent(selectedCategories);
-    map.current.getSource('opportunities').setData('/api/opportunities?tags='+arrStr); 
+    map.current.getSource('opportunities').setData(!data ? '/api/opportunities' :data); 
   }, [selectedCategories]);
   return (
     <div>

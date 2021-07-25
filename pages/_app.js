@@ -31,6 +31,8 @@ const App = ({ Component, pageProps }) => {
             enlargedBox={enlargedBox}
             selectedItem={selectedItem}
             selectedCategories={selectedCategories}
+            setEnlargedBox={setEnlargedBox}
+            setSelectedItem={setSelectedItem}
           />
         </div>
         <Map
