@@ -1,8 +1,6 @@
-import { Grid, Button, Badge, Box, Text, Heading, Input } from 'theme-ui'
-import Map from '../components/map'
+import { Grid, Button, Box, Text, Heading, Input } from 'theme-ui'
 import { useState, useRef } from 'react'
 const title = require('title')
-import Div100vh from 'react-div-100vh'
 import { useSwipeable } from 'react-swipeable'
 import Image from 'next/image'
 import { signIn, signOut, useSession } from 'next-auth/client'
@@ -98,7 +96,7 @@ function LoginModal(props) {
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
-export default function Home() {
+export default function Home({enlargedBox, selectedItem, selectedCategories}) {
   const router = useRouter()
   const [session, loading] = useSession()
   const [isLoginOpen, setLoginIsOpen] = useState(false)
@@ -120,28 +118,16 @@ export default function Home() {
     { color: 'brown', label: 'Outdoors', key: 'outdoors' },
     { color: 'cyan', label: 'Disability Care', key: 'disabilityCare' },
   ]
-  const [selectedCategories, setSelectedCategories] = useState([])
-  const [selectedItem, setSelectedItem] = useState(null)
-  const [enlargedBox, setEnlargedBox] = useState(false)
-
-  function handleSelection(value) {
-    setEnlargedBox(true)
-    if (selectedItem !== value) {
-      setSelectedItem(value)
-    } else {
-      setSelectedItem(null)
-    }
-  }
   const handlers = useSwipeable({
     onSwipedUp: eventData => setEnlargedBox(true),
     onSwipedDown: eventData => setEnlargedBox(false),
   })
   return (
-    <Div100vh>
+    <>
       <LoginModal open={isLoginOpen} setLoginIsOpen={setLoginIsOpen} />
       <Box
         as="main"
-        sx={{ bg: '#E6E4E0', maxHeight: '100vh', overflowY: 'hidden' }}
+        sx={{ maxHeight: '100vh', overflowY: 'hidden' }}
       >
         <Box
           sx={{
@@ -321,11 +307,6 @@ export default function Home() {
             ''
           )}
         </Box>
-        <Map
-          setSelectedItem={handleSelection}
-          selectedItem={selectedItem}
-          selectedCategories={selectedCategories}
-        />
       </Box>
       <style>{`
         html {
@@ -344,6 +325,6 @@ export default function Home() {
           top: 20%!important;
         }
       `}</style>
-    </Div100vh>
+    </>
   )
 }

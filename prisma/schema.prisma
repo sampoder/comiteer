@@ -23,6 +23,16 @@ model Opportunities {
   updatedAt   DateTime @default(now()) @map("updated_at")
 }
 
+model Messages {
+  id           String   @id @default(cuid())
+  fromId       String
+  toId         String
+  from         User     @relation("fromRel", fields: [fromId], references: [id])
+  to           User     @relation("toRel", fields: [toId], references: [id])
+  attachements String[]
+  createdAt    DateTime @default(now()) @map("created_at")
+}
+
 model Account {
   id                 Int       @id @default(autoincrement())
   compoundId         String    @unique @map(name: "compound_id")
@@ -55,15 +65,17 @@ model Session {
 }
 
 model User {
-  id            Int       @id @default(autoincrement())
+  id            String     @id @default(cuid())
   nickname      String?
   name          String?
   dob           String?
-  email         String?   @unique
-  emailVerified DateTime? @map(name: "email_verified")
+  email         String?    @unique
+  emailVerified DateTime?  @map(name: "email_verified")
   image         String?
-  createdAt     DateTime  @default(now()) @map(name: "created_at")
-  updatedAt     DateTime  @default(now()) @map(name: "updated_at")
+  createdAt     DateTime   @default(now()) @map(name: "created_at")
+  updatedAt     DateTime   @default(now()) @map(name: "updated_at")
+  from          Messages[] @relation("fromRel")
+  to            Messages[] @relation("toRel")
 
   @@map(name: "users")
 }

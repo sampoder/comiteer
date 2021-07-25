@@ -7,8 +7,6 @@ export default function Home() {
         minHeight: '100vh',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundImage:
-          'url(https://cloud-ft66fulr0-hack-club-bot.vercel.app/0screenshot_2021-07-20_at_12.41.19.png)',
         backgroundSize: 'cover',
       }}
     >

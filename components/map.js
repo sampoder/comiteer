@@ -128,7 +128,7 @@ export default function Map({ setSelectedItem, selectedCategories }) {
       <div
         ref={mapContainer}
         className="map-container"
-        style={{ height: '100vh' }}
+        style={{ height: '100vh', position: 'absolute', width: '100%', top: 0, zIndex: 0, opacity: loaded ? 1 : 0 }}
       />
       <style>
         {`
