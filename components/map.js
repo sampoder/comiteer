@@ -1,16 +1,16 @@
 import React, { useRef, useEffect, useState } from 'react'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoic2FtcG9kZXIiLCJhIjoiY2todDBzdGE1MGhtYjJxcm04d3d1eGNiZyJ9.BFl0606fHUex_oRZ7Y0Sqw'
 
-  const fetcher = (...args) => fetch(...args).then(res => res.json())
+const fetcher = (...args) => fetch(...args).then(res => res.json())
 
 export default function Map({ setSelectedItem, selectedCategories }) {
   const map = useRef(null)
   const mapContainer = useRef(null)
-  const {data, error} = useSWR('/api/opportunities', fetcher)
+  const { data, error } = useSWR('/api/opportunities', fetcher)
   const [lng, setLng] = useState(103.8229)
   const [lat, setLat] = useState(1.3485)
   const [zoom, setZoom] = useState(11.08)
@@ -60,8 +60,9 @@ export default function Map({ setSelectedItem, selectedCategories }) {
         },
       })
 
-      map.current.getSource('opportunities').setData(!data ? '/api/opportunities' :data); 
-
+      map.current
+        .getSource('opportunities')
+        .setData(!data ? '/api/opportunities' : data)
       map.current.addLayer({
         id: 'cluster-count',
         type: 'symbol',
@@ -124,15 +125,35 @@ export default function Map({ setSelectedItem, selectedCategories }) {
   })
   useEffect(() => {
     if (!map.current || !loaded) return // wait for map to initialize
-    var arrStr = encodeURIComponent(selectedCategories);
-    map.current.getSource('opportunities').setData(!data ? '/api/opportunities' :data); 
-  }, [selectedCategories]);
+    var arrStr = encodeURIComponent(selectedCategories)
+    const data2 = data
+    const fullData = data
+    let filteredData = data2
+    console.log('Data object:')
+    console.log(data)
+    console.log('Before filtering:')
+    console.log(filteredData)
+    filteredData.features = filteredData.features.filter(function (el) {
+      console.log(el.properties.tags)
+      return el.properties.tags.some(r=> selectedCategories.includes(r));
+    });
+    map.current
+      .getSource('opportunities')
+      .setData(!filteredData ? `/api/opportunities?tags=${arrStr}` : filteredData)
+  }, [selectedCategories])
   return (
     <div>
       <div
         ref={mapContainer}
         className="map-container"
-        style={{ height: '100vh', position: 'absolute', width: '100%', top: 0, zIndex: 0, opacity: loaded ? 1 : 0 }}
+        style={{
+          height: '100vh',
+          position: 'absolute',
+          width: '100%',
+          top: 0,
+          zIndex: 0,
+          opacity: loaded ? 1 : 0,
+        }}
       />
       <style>
         {`
