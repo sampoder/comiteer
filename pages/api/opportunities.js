@@ -49,6 +49,5 @@ export default async function handler(req, res) {
       coordinates: [opportunity.longitude, opportunity.latitude, 0.0],
     },
   }))
-  console.log(base)
   res.status(200).json(base)
 }

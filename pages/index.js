@@ -143,7 +143,7 @@ export default function Home({
                 </Grid>
               )}
               {!selectedItem && (
-                <Box my={2}>
+                <Box my={2} >
                   <Input
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
@@ -153,7 +153,8 @@ export default function Home({
                   <Box
                     as={searchQuery.trim().length === 0 ? 'div' : 'details'}
                     mt={2}
-                    sx={{ '> button': { m: 1, ml: 0 } }}
+                    sx={{ '> button': { m: 1, ml: 0}, borderBottom: '1px solid', pb: 3,
+                    borderColor: 'muted' }}
                   >
                     <summary
                       style={{
@@ -184,6 +185,7 @@ export default function Home({
                         {category.label}
                       </Button>
                     ))}
+                  
                   </Box>
                   {!data
                     ? ''
