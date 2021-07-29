@@ -1,5 +1,26 @@
 import React, { useRef, useEffect, useState } from 'react'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
+import { usePosition } from 'use-position'
+import { Box, Button } from 'theme-ui'
+import {colors} from '../lib/theme'
+
+const categories = [
+  { color: 'blue', label: 'Hands-on', key: 'handsOn' },
+  { color: 'purple', label: 'Digital', key: 'digital' },
+  {
+    color: 'green',
+    label: 'Environmental Awareness',
+    key: 'environmentalAwareness',
+  },
+  { color: 'yellow', label: 'Social Services', key: 'socialServices' },
+  { color: 'pink', label: 'Re-occurring', key: 'reOccurring' },
+  { color: 'red', label: 'Crisis Support', key: 'crisisSupport' },
+  { color: 'navy', label: 'Elderly Support', key: 'elderlySupport' },
+  { color: 'peach', label: 'COVID-19', key: 'covid19' },
+  { color: 'orange', label: 'Teaching', key: 'teaching' },
+  { color: 'brown', label: 'Outdoors', key: 'outdoors' },
+  { color: 'cyan', label: 'Disability Care', key: 'disabilityCare' },
+]
 
 mapboxgl.accessToken =
   'pk.eyJ1Ijoic2FtcG9kZXIiLCJhIjoiY2todDBzdGE1MGhtYjJxcm04d3d1eGNiZyJ9.BFl0606fHUex_oRZ7Y0Sqw'
@@ -16,13 +37,15 @@ export default function Map({
   const [lat, setLat] = useState(1.3485)
   const [zoom, setZoom] = useState(11.08)
   const [loaded, setLoaded] = useState(false)
+  const { latitude, longitude, speed, timestamp, accuracy, error } =
+    usePosition()
   useEffect(() => {
     if (map.current) return // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v11?optimize=true',
-      center: [lng, lat],
-      zoom: zoom,
+      center: [longitude ? longitude : lng, latitude ? latitude : lat],
+      zoom: longitude ? 14 : zoom,
       minZoom: 10,
       innerHeight: 100,
     })
@@ -40,15 +63,16 @@ export default function Map({
         source: 'opportunities',
         filter: ['has', 'point_count'],
         paint: {
-          'circle-color': [
-            'step',
-            ['get', 'point_count'],
-            '#51bbd6',
-            100,
-            '#f1f075',
-            750,
-            '#f28cb1',
-          ],
+          
+            'circle-color': [
+              'step',
+              ['get', 'point_count'],
+              '#51bbd6',
+              100,
+              '#f1f075',
+              750,
+              '#f28cb1',
+            ],
           'circle-radius': [
             'step',
             ['get', 'point_count'],
@@ -82,7 +106,12 @@ export default function Map({
         source: 'opportunities',
         filter: ['!', ['has', 'point_count']],
         paint: {
-          'circle-color': '#11b4da',
+          'circle-color': [
+            'match',
+            ['get', 'firstTag'],
+            ...categories.map(x => [x.key, colors[x.color]]).flat(),
+            '#0e90db'
+          ],
           'circle-radius': 8,
           'circle-stroke-width': 2,
           'circle-stroke-color': '#fff',
@@ -163,6 +192,18 @@ export default function Map({
           opacity: loaded ? 1 : 0,
         }}
       />
+      <Box sx={{ position: 'fixed', bottom: 3, right: 3, zIndex: 100 }}>
+        <Button
+          onClick={() => {
+            map.current.easeTo({
+              center: [longitude, latitude],
+              zoom: 15,
+            })
+          }}
+        >
+          ⦿
+        </Button>
+      </Box>
       <style>
         {`
         .mapboxgl-ctrl > a{

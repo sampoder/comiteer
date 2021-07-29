@@ -2,6 +2,7 @@ import { Grid, Button, Box, Text, Heading, Input, Flex } from 'theme-ui'
 const title = require('title')
 import { useSwipeable } from 'react-swipeable'
 import Image from 'next/image'
+import Link from 'next/link'
 
 Array.prototype.remove = function () {
   var what,
@@ -105,33 +106,33 @@ export default function Home({
                 }}
               ></Box>
               <Box {...headerHandlers}>
-              <Box
-                sx={{
-                  cursor: 'pointer',
-                  borderBottom: '1px solid',
-                  borderColor: 'muted',
-                  pb: 1,
-                  mb: 1,
-                  display: ['none', selectedItem == null ? 'none' : 'block'],
-                }}
-                onClick={() => setSelectedItem(null)}
-              >
-                Home
-              </Box>
-              <Heading as="h1">
-                {!selectedItem ? 'Comiteer' : selectedItem.name}
-              </Heading>
-              {selectedItem && (
-                <Box mt={2} color="slate">
-                  {title(selectedItem.address)}
+                <Box
+                  sx={{
+                    cursor: 'pointer',
+                    borderBottom: '1px solid',
+                    borderColor: 'muted',
+                    pb: 1,
+                    mb: 1,
+                    display: ['none', selectedItem == null ? 'none' : 'block'],
+                  }}
+                  onClick={() => setSelectedItem(null)}
+                >
+                  Home
                 </Box>
-              )}
-              <Box mt={2}>
-                {!selectedItem
-                  ? `Explore the map of Singapore and find out what is happening in
+                <Heading as="h1">
+                  {!selectedItem ? 'Comiteer' : selectedItem.name}
+                </Heading>
+                {selectedItem && (
+                  <Box mt={2} color="slate">
+                    {title(selectedItem.address)}
+                  </Box>
+                )}
+                <Box mt={2}>
+                  {!selectedItem
+                    ? `Explore the map of Singapore and find out what is happening in
               your area.`
-                  : selectedItem.description}
-              </Box>
+                    : selectedItem.description}
+                </Box>
               </Box>
               {selectedItem && (
                 <Grid mt={2} color="slate" gap={2} columns={2}>
@@ -142,8 +143,27 @@ export default function Home({
                   ))}
                 </Grid>
               )}
+              {selectedItem && (
+                <Link href={`/messages?new=`+selectedItem.creatorId}>
+                <Button
+                 as="div"
+                  mt={2}
+                  sx={{
+                    width: '100%',
+                    ':focus,:hover': {
+                      boxShadow: 'elevated',
+                      transform: 'scale(1)',
+                    
+                    },
+                  }}
+                >
+                  {' '}
+                  Message The Organizer
+                </Button>
+                </Link>
+              )}
               {!selectedItem && (
-                <Box my={2} >
+                <Box my={2}>
                   <Input
                     value={searchQuery}
                     onChange={e => setSearchQuery(e.target.value)}
@@ -153,8 +173,12 @@ export default function Home({
                   <Box
                     as={searchQuery.trim().length === 0 ? 'div' : 'details'}
                     mt={2}
-                    sx={{ '> button': { m: 1, ml: 0}, borderBottom: '1px solid', pb: 3,
-                    borderColor: 'muted' }}
+                    sx={{
+                      '> button': { m: 1, ml: 0 },
+                      borderBottom: '1px solid',
+                      pb: 3,
+                      borderColor: 'muted',
+                    }}
                   >
                     <summary
                       style={{
@@ -185,7 +209,6 @@ export default function Home({
                         {category.label}
                       </Button>
                     ))}
-                  
                   </Box>
                   {!data
                     ? ''
@@ -204,7 +227,12 @@ export default function Home({
                           )
                         })
                         .map(x => (
-                          <Flex mt={3} sx={{cursor: 'pointer'}} key={x.properties.id} onClick={()=> setSelectedItem(x.properties)}>
+                          <Flex
+                            mt={3}
+                            sx={{ cursor: 'pointer' }}
+                            key={x.properties.id}
+                            onClick={() => setSelectedItem(x.properties)}
+                          >
                             <img
                               src={images[0]}
                               style={{

@@ -42,6 +42,7 @@ export default async function handler(req, res) {
   base.features = allOpportunities.map(opportunity => ({
     type: 'Feature',
     properties: {
+      firstTag: opportunity.tags[0],
       ...opportunity,
     },
     geometry: {

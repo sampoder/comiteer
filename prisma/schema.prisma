@@ -19,6 +19,8 @@ model Opportunities {
   latitude    Float?
   images      String[]
   tags        String[]
+  creatorId   Int?
+  creator     User?    @relation("createdRel", fields: [creatorId], references: [id])
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @map("updated_at")
 }
@@ -66,7 +68,7 @@ model Session {
 }
 
 model User {
-  id            Int     @id @default(autoincrement())
+  id            Int        @id @default(autoincrement())
   nickname      String?
   name          String?
   dob           String?
@@ -76,6 +78,7 @@ model User {
   createdAt     DateTime   @default(now()) @map(name: "created_at")
   updatedAt     DateTime   @default(now()) @map(name: "updated_at")
   from          Messages[] @relation("fromRel")
+  created          Opportunities[] @relation("createdRel")
   to            Messages[] @relation("toRel")
 
   @@map(name: "users")
