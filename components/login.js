@@ -36,7 +36,6 @@ function LoginModal(props) {
         width: '400px',
         maxWidth: '90vw',
         minHeight: '0vh',
-        height: 'fit-content',
         mt: 4
       }}
       {...props}

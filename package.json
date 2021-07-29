@@ -13,6 +13,7 @@
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^11.0.1",
     "@prisma/client": "2.26.0",
+    "babel-plugin-superjson-next": "^0.3.0",
     "framer-motion": "3.10.6",
     "mapbox-gl": "^2.3.1",
     "md5": "^2.3.0",
@@ -26,6 +27,7 @@
     "react-hammerjs": "^1.0.1",
     "react-swipeable": "^6.1.2",
     "react-tooltip": "^4.2.21",
+    "superjson": "^1.7.4",
     "swr": "^0.5.6",
     "theme-ui": "^0.10.0",
     "title": "^3.4.3"

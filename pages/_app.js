@@ -10,7 +10,7 @@ import Map from '../components/map'
 import { useState } from 'react'
 import mapBG from '../public/map_bg.png'
 import dynamic from 'next/dynamic'
-const Login = dynamic(() => import('../components/login'), { ssr: false })
+const Login = dynamic(() => import('../components/login'))
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 

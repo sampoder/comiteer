@@ -30,6 +30,7 @@ model Messages {
   from         User     @relation("fromRel", fields: [fromId], references: [id])
   to           User     @relation("toRel", fields: [toId], references: [id])
   attachements String[]
+  text         String
   createdAt    DateTime @default(now()) @map("created_at")
 }
 

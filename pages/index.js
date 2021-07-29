@@ -89,7 +89,7 @@ export default function Home({
           >
             <Box
               sx={{
-                height: 'calc(100% - 36px)',
+                height: 'calc(100% - 42px)',
                 overflowY: [enlargedBox ? 'scroll' : 'hidden', 'scroll'],
               }}
             >
@@ -224,7 +224,7 @@ export default function Home({
             </Box>
             <Box
               sx={{
-                height: '36px',
+                height: '42px',
                 borderTop: '1px solid',
                 borderColor: 'muted',
                 color: 'muted',
