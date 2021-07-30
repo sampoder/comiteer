@@ -159,15 +159,15 @@ export default function Messages({
               </Box>
             </Box>
             {viewingMessages.identity !== undefined && (
-              <Flex
+              <Box
                 sx={{
                   display: [
                     'none',
-                    viewingMessages.identity === undefined ? 'none' : 'flex',
+                    viewingMessages.identity === undefined ? 'none' : 'block',
                   ],
-                  flexDirection: 'column',
+                  
                   height: '100%',
-                  flex: 1,
+                
                 }}
               >
                 <Flex
@@ -189,14 +189,14 @@ export default function Messages({
                     {viewingMessages.identity.nickname}
                   </Heading>
                 </Flex>
+                <Box sx={{maxHeight: 'calc(100vh - 64px - 45px)', overflowY: 'scroll'}}>
                 <Flex
                   sx={{
-                    flexDirection: 'column',
-                    flexGrow: 1,
-                    alignSelf: 'stretch',
+                    flexDirection: 'column-reverse',
                     my: 2,
-                    maxHeight: 'calc(100% - 42px - 45px)',
-                    overflowY: 'scroll'
+                    overflowY: 'scroll',
+                    height: 'calc(100vh - 64px - 45px - 42px)',
+                    maxHeight: 'calc(100vh - 64px - 45px - 42px)'
                   }}
                 >
                   {[
@@ -211,7 +211,7 @@ export default function Messages({
                   ]
                     .sort(
                       (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-                    )
+                    ).reverse()
                     .map(x => (
                       <Box
                         bg={x.sent ? 'blue' : 'green'}
@@ -239,7 +239,8 @@ export default function Messages({
                     onKeyDown={handleKeyDown}
                   />
                 </Box>
-              </Flex>
+                </Box>
+              </Box>
             )}
           </Grid>
         </Box>
