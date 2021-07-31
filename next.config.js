@@ -7,8 +7,15 @@ module.exports = withMDX({
       'cloud-qmweg7d8y-hack-club-bot.vercel.app',
       'volunteer.gov.sg',
       'lp-cms-production.imgix.net',
-      'www.volunteer.gov.sg'
+      'www.volunteer.gov.sg',
     ],
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push('_http_common')
+      // config.externals.push('encoding');
+    }
+    return config
   },
   async redirects() {
     return [
