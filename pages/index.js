@@ -1,7 +1,6 @@
 import { Grid, Button, Box, Text, Heading, Input, Flex } from 'theme-ui'
 const title = require('title')
 import { useSwipeable } from 'react-swipeable'
-import Image from 'next/image'
 import Link from 'next/link'
 
 Array.prototype.remove = function () {
@@ -63,6 +62,7 @@ export default function Home({
   const unEnlargedProps = {
     onClick: () => setEnlargedBox(true),
   }
+  console.log(selectedItem)
   return (
     <>
       <Box as="main" sx={{ maxHeight: '100vh', overflowY: 'hidden' }}>
@@ -135,10 +135,10 @@ export default function Home({
                 </Box>
               </Box>
               {selectedItem && (
-                <Grid mt={2} color="slate" gap={2} columns={2}>
-                  {images.map(x => (
+                <Grid mt={2} color="slate" gap={2} columns={(typeof selectedItem.images == "string" ? JSON.parse(selectedItem.images).length : selectedItem.images.length) == 1? 1: 2}>
+                  {(typeof selectedItem.images == "string" ? JSON.parse(selectedItem.images) : selectedItem.images).map(x => (
                     <Box sx={{ position: 'relative' }} key={x}>
-                      <Image src={x} width={200} height={150} />
+                      <img src={x} width="100%" />
                     </Box>
                   ))}
                 </Grid>
@@ -234,7 +234,7 @@ export default function Home({
                             onClick={() => setSelectedItem(x.properties)}
                           >
                             <img
-                              src={images[0]}
+                              src={x.properties.images[0]}
                               style={{
                                 height: '64px',
                                 objectFit: 'cover',
@@ -242,8 +242,8 @@ export default function Home({
                               }}
                             />
                             <Box ml={'9px'} sx={{ alignSelf: 'center' }}>
-                              <Heading as="h3">{x.properties.name}</Heading>
-                              {x.properties.description}
+                              <Heading as="h3">{title(x.properties.name)}</Heading>
+                              {title(x.properties.address)}
                             </Box>
                           </Flex>
                         ))}
