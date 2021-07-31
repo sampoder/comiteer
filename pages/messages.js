@@ -10,7 +10,6 @@ import {
   Select,
 } from 'theme-ui'
 import { useSwipeable } from 'react-swipeable'
-import prisma from '../lib/prisma'
 import { getSession } from 'next-auth/client'
 import { useState, useRef } from 'react'
 import useSWR, { mutate } from 'swr'
@@ -418,6 +417,7 @@ export default function Messages({
 
 export async function getServerSideProps({ res, req, query }) {
   const md5 = require('md5')
+  const prisma = require('prisma')
   const session = await getSession({ req })
   console.log(session)
   if (session === null) {
