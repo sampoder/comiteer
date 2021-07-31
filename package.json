@@ -15,6 +15,7 @@
     "@prisma/client": "2.26.0",
     "babel-plugin-superjson-next": "^0.3.0",
     "framer-motion": "3.10.6",
+    "hdb-pool": "^0.1.6",
     "mapbox-gl": "^2.3.1",
     "md5": "^2.3.0",
     "mongodb": "^4.0.1",
@@ -33,6 +34,7 @@
     "swr": "^0.5.6",
     "theme-ui": "^0.10.0",
     "title": "^3.4.3",
+    "typeorm": "^0.2.36",
     "use-position": "^0.0.8",
     "wink-sentiment": "^5.0.2"
   },
