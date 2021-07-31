@@ -192,7 +192,7 @@ export default function Map({
           opacity: loaded ? 1 : 0,
         }}
       />
-      <Box sx={{ position: 'fixed', bottom: 3, right: 3, zIndex: 100 }}>
+      <Box sx={{ position: 'fixed', bottom: 3, right: 3, zIndex: 3 }}>
         <Button
           onClick={() => {
             map.current.easeTo({
@@ -200,8 +200,9 @@ export default function Map({
               zoom: 15,
             })
           }}
+          sx={{}}
         >
-          ⦿
+          📍
         </Button>
       </Box>
       <style>

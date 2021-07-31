@@ -1,11 +1,141 @@
-import { Grid, Button, Box, Text, Heading, Input, Flex } from 'theme-ui'
+import {
+  Grid,
+  Button,
+  Box,
+  Text,
+  Heading,
+  Input,
+  Flex,
+  Textarea,
+  Select,
+} from 'theme-ui'
 import { useSwipeable } from 'react-swipeable'
 import prisma from '../lib/prisma'
 import { getSession } from 'next-auth/client'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import useSWR, { mutate } from 'swr'
+import { Modal, ModalContent, ModalFooter } from '@mattjennings/react-modal'
+import { useRouter } from 'next/router'
+var sentiment = require('wink-sentiment')
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
+
+function ReportModal(props) {
+  const router = useRouter()
+  const [buttonDetails, setButtonDetails] = useState({
+    text: 'Report User',
+    bg: 'blue',
+  })
+  const inputRefEl = useRef(null)
+  return (
+    <Modal
+      sx={{
+        borderRadius: 5,
+        p: 3,
+        px: 0,
+        width: '400px',
+        maxWidth: '90vw',
+        minHeight: '0vh',
+        mt: 4,
+      }}
+      {...props}
+    >
+      <ModalContent>
+        <Textarea
+          sx={{ mb: 3, mt: 1 }}
+          rows={8}
+          placeholder="Describe The Incident"
+          type="email"
+          ref={inputRefEl}
+        />
+        <Select
+          sx={{ mb: 1, mt: 1 }}
+          arrow={
+            <Box
+              as="svg"
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="currentcolor"
+              sx={{
+                ml: -28,
+                mt: 0,
+                alignSelf: 'center',
+                pointerEvents: 'none',
+              }}
+            >
+              <path d="M7.41 7.84l4.59 4.58 4.59-4.58 1.41 1.41-6 6-6-6z" />
+            </Box>
+          }
+          defaultValue="Please Categorize This Incident"
+        >
+          <option>Please Categorize This Incident</option>
+          <option>Micro Aggressions</option>
+          <option>Direct Insults</option>
+          <option>Inappropriate Behavior</option>
+          <option>Spam-like Behavior</option>
+          <option>Scamming</option>
+          <option>Illegal Behavior</option>
+        </Select>
+        <Box sx={{ mb: 3, mt: 1, color: 'muted' }}>
+          <small>
+            Please note, by doing this your entire chat contents with this user
+            may be reviewed.
+          </small>
+        </Box>
+      </ModalContent>
+      <ModalFooter>
+        <Button
+          sx={{ width: '100%', bg: buttonDetails.bg }}
+          onClick={() => router.push('/')}
+        >
+          {buttonDetails.text}
+        </Button>
+      </ModalFooter>
+    </Modal>
+  )
+}
+
+function CalmDownModal(props) {
+  const router = useRouter()
+  const [buttonDetails, setButtonDetails] = useState({
+    text: 'OK',
+    bg: 'blue',
+  })
+  const inputRefEl = useRef(null)
+  return (
+    <Modal
+      sx={{
+        borderRadius: 5,
+        p: 3,
+        px: 0,
+        width: '400px',
+        maxWidth: '90vw',
+        minHeight: '0vh',
+        mt: 4,
+      }}
+      {...props}
+    >
+      <ModalContent>
+        <Box sx={{ mb: 3, mt: 1 }}>
+          👋 Hey! Our robots have detected an abundance of negativity in your
+          recent messages, just a quick reminder: Comiteer is a friendly
+          platform for people of all ages and backgrounds. You can read more
+          about positive interactions online here and report a user here.
+        </Box>
+      </ModalContent>
+      <ModalFooter>
+        <Button
+          sx={{ width: '100%', bg: buttonDetails.bg }}
+          onClick={() => props.setLoginIsOpen(false)}
+        >
+          {buttonDetails.text}
+        </Button>
+      </ModalFooter>
+    </Modal>
+  )
+}
 
 export default function Messages({
   enlargedBox,
@@ -14,11 +144,15 @@ export default function Messages({
   setSelectedItem,
   initialConversations,
   initialMessages,
-  newConvo
+  newConvo,
 }) {
   const [searchQuery, setSearchQuery] = useState('')
   const [draftMessage, setDraftMessage] = useState('')
-  const [viewingMessages, setViewingMessages] = useState(newConvo == null ? {} : {identity: newConvo})
+  const [isReportOpen, setReportIsOpen] = useState(false)
+  const [isCalmDownOpen, setCalmDownIsOpen] = useState(false)
+  const [viewingMessages, setViewingMessages] = useState(
+    newConvo == null ? {} : { identity: newConvo },
+  )
   const { data, error } = useSWR(`/api/messages`, fetcher, {
     refreshInterval: 1000,
   })
@@ -30,6 +164,8 @@ export default function Messages({
 
   const headerHandlers = useSwipeable({
     onSwipedDown: eventData => setEnlargedBox(false),
+    onSwipedLeft: eventData => setViewingMessages(undefined),
+    onSwipedRight: eventData => setViewingMessages(undefined)
   })
 
   const unEnlargedProps = {
@@ -38,19 +174,28 @@ export default function Messages({
   const handleKeyDown = async event => {
     if (event.key === 'Enter') {
       let message = draftMessage
-      setDraftMessage('')
-      await fetch(`/api/send?to=${viewingMessages.identity.id}&text=${message}`)
-      mutate('/api/messages')
+      let {normalizedScore} = sentiment(message)
+      if(normalizedScore < -3.99){
+        setCalmDownIsOpen(true)
+      }
+      else{
+        setDraftMessage('')
+        await fetch(`/api/send?to=${viewingMessages.identity.id}&text=${message}`)
+        mutate('/api/messages')
+      }
     }
   }
+
   return (
     <>
+      <CalmDownModal open={isCalmDownOpen} setLoginIsOpen={setCalmDownIsOpen} />
+      <ReportModal open={isReportOpen} setLoginIsOpen={setReportIsOpen} />
       <Box as="main" sx={{ maxHeight: '100vh', overflowY: 'hidden' }}>
         <Box
           sx={{
             position: 'fixed',
             zIndex: '100',
-            height: [enlargedBox ? '60vh' : '22vh', '100vh'],
+            height: '100vh',
             transition: 'height ease-in 0.5s',
             width: [
               '100%',
@@ -75,7 +220,7 @@ export default function Messages({
               viewingMessages.identity === undefined ? 1 : '400px 3fr',
             ]}
           >
-            <Box>
+            <Box sx={{display: viewingMessages.identity === undefined ? 'block' : 'none',}}>
               <Box
                 sx={{
                   height: 'calc(100% - 42px)',
@@ -162,12 +307,11 @@ export default function Messages({
               <Box
                 sx={{
                   display: [
-                    'none',
+                    'block',
                     viewingMessages.identity === undefined ? 'none' : 'block',
                   ],
-                  
+
                   height: '100%',
-                
                 }}
               >
                 <Flex
@@ -175,6 +319,7 @@ export default function Messages({
                     borderBottom: '1px solid',
                     borderColor: 'muted',
                     pb: 2,
+                    alignItems: 'center',
                   }}
                 >
                   <img
@@ -188,57 +333,70 @@ export default function Messages({
                   <Heading as="h1" sx={{ ml: 2 }}>
                     {viewingMessages.identity.nickname}
                   </Heading>
+                  <Heading
+                    sx={{ flexGrow: 1, textAlign: 'right' }}
+                    onClick={() => setReportIsOpen(true)}
+                  >
+                    ⚠️
+                  </Heading>
                 </Flex>
-                <Box sx={{maxHeight: 'calc(100vh - 64px - 45px)', overflowY: 'scroll'}}>
-                <Flex
+                <Box
                   sx={{
-                    flexDirection: 'column-reverse',
-                    my: 2,
+                    maxHeight: ['calc(100vh - 45px)', 'calc(100vh - 64px - 45px)'],
                     overflowY: 'scroll',
-                    height: 'calc(100vh - 64px - 45px - 42px)',
-                    maxHeight: 'calc(100vh - 64px - 45px - 42px)'
                   }}
                 >
-                  {[
-                    ...(typeof messages.received[viewingMessages.identity.id] ==
-                    'undefined'
-                      ? []
-                      : messages.received[viewingMessages.identity.id]),
-                    ...(typeof messages.sent[viewingMessages.identity.id] ==
-                    'undefined'
-                      ? []
-                      : messages.sent[viewingMessages.identity.id]),
-                  ]
-                    .sort(
-                      (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
-                    ).reverse()
-                    .map(x => (
-                      <Box
-                        bg={x.sent ? 'blue' : 'green'}
-                        color="white"
-                        sx={{
-                          width: 'fit-content',
-                          p: 2,
-                          borderRadius: 4,
-                          mb: 1,
-                          alignSelf: x.sent ? 'flex-end' : null,
-                        }}
-                        title={x.createdAt}
-                        key={x.createdAt+x.sent}
-                      >
-                        {x.text}
-                      </Box>
-                    ))}
-                </Flex>
-                <Box mt={2}>
-                  <Input
-                    value={draftMessage}
-                    onChange={e => setDraftMessage(e.target.value)}
-                    placeholder="Send A Message"
-                    sx={{ border: '1px dashed' }}
-                    onKeyDown={handleKeyDown}
-                  />
-                </Box>
+                  <Flex
+                    sx={{
+                      flexDirection: 'column-reverse',
+                      my: 0,
+                      overflowY: 'scroll',
+                      height: ['calc(100vh - 45px - 32px - 42px - 4px)', 'calc(100vh - 64px - 45px - 42px - 4px)'],
+                      maxHeight: ['calc(100vh - 45px - 32px - 42px - 4px)', 'calc(100vh - 64px - 45px - 42px - 4px)'],
+                    }}
+                  >
+                    {[
+                      ...(typeof messages.received[
+                        viewingMessages.identity.id
+                      ] == 'undefined'
+                        ? []
+                        : messages.received[viewingMessages.identity.id]),
+                      ...(typeof messages.sent[viewingMessages.identity.id] ==
+                      'undefined'
+                        ? []
+                        : messages.sent[viewingMessages.identity.id]),
+                    ]
+                      .sort(
+                        (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
+                      )
+                      .reverse()
+                      .map(x => (
+                        <Box
+                          bg={x.sent ? 'blue' : 'green'}
+                          color="white"
+                          sx={{
+                            width: 'fit-content',
+                            p: 2,
+                            borderRadius: 4,
+                            mb: 1,
+                            alignSelf: x.sent ? 'flex-end' : null,
+                          }}
+                          title={x.createdAt}
+                          key={x.createdAt + x.sent}
+                        >
+                          {x.text}
+                        </Box>
+                      ))}
+                  </Flex>
+                  <Box mt={2}>
+                    <Input
+                      value={draftMessage}
+                      onChange={e => setDraftMessage(e.target.value)}
+                      placeholder="Send A Message"
+                      sx={{ border: '1px dashed' }}
+                      onKeyDown={handleKeyDown}
+                    />
+                  </Box>
                 </Box>
               </Box>
             )}
@@ -278,11 +436,13 @@ export async function getServerSideProps({ res, req, query }) {
       to: { include: { from: true } },
     },
   })
-  let newConvo = query.new ? await prisma.user.findFirst({
-    where: {
-      id: parseInt(query.new),
-    },
-  }) : null
+  let newConvo = query.new
+    ? await prisma.user.findFirst({
+        where: {
+          id: parseInt(query.new),
+        },
+      })
+    : null
   newConvo =
     newConvo == null
       ? null
@@ -348,6 +508,10 @@ export async function getServerSideProps({ res, req, query }) {
     }
   })
   return {
-    props: { initialConversations: conversations, initialMessages: messages, newConvo },
+    props: {
+      initialConversations: conversations,
+      initialMessages: messages,
+      newConvo,
+    },
   }
 }

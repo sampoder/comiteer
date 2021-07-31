@@ -31,7 +31,8 @@
     "swr": "^0.5.6",
     "theme-ui": "^0.10.0",
     "title": "^3.4.3",
-    "use-position": "^0.0.8"
+    "use-position": "^0.0.8",
+    "wink-sentiment": "^5.0.2"
   },
   "devDependencies": {
     "prisma": "2.26.0"
