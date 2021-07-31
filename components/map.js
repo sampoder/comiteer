@@ -2,7 +2,8 @@ import React, { useRef, useEffect, useState } from 'react'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
 import { usePosition } from 'use-position'
 import { Box, Button } from 'theme-ui'
-import {colors} from '../lib/theme'
+import { colors } from '../lib/theme'
+const title = require('title')
 
 const categories = [
   { color: 'blue', label: 'Hands-on', key: 'handsOn' },
@@ -63,16 +64,15 @@ export default function Map({
         source: 'opportunities',
         filter: ['has', 'point_count'],
         paint: {
-          
-            'circle-color': [
-              'step',
-              ['get', 'point_count'],
-              '#51bbd6',
-              100,
-              '#f1f075',
-              750,
-              '#f28cb1',
-            ],
+          'circle-color': [
+            'step',
+            ['get', 'point_count'],
+            '#51bbd6',
+            100,
+            '#f1f075',
+            750,
+            '#f28cb1',
+          ],
           'circle-radius': [
             'step',
             ['get', 'point_count'],
@@ -110,7 +110,7 @@ export default function Map({
             'match',
             ['get', 'firstTag'],
             ...categories.map(x => [x.key, colors[x.color]]).flat(),
-            '#0e90db'
+            '#0e90db',
           ],
           'circle-radius': 8,
           'circle-stroke-width': 2,
@@ -142,6 +142,37 @@ export default function Map({
       })
       map.current.on('mouseleave', 'clusters', function () {
         map.current.getCanvas().style.cursor = ''
+      })
+      var popup = new mapboxgl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+      })
+
+      map.current.on('mouseenter', 'unclustered-point', function (e) {
+        // Change the cursor style as a UI indicator.
+        map.current.getCanvas().style.cursor = 'pointer'
+
+        var coordinates = e.features[0].geometry.coordinates.slice()
+        var description = title(e.features[0].properties.name)
+
+        // Ensure that if the map is zoomed out such that multiple
+        // copies of the feature are visible, the popup appears
+        // over the copy being pointed to.
+        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
+        }
+
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup
+          .setLngLat(coordinates)
+          .setHTML(`<b>${description}</b>`)
+          .addTo(map.current)
+      })
+
+      map.current.on('mouseleave', 'unclustered-point', function () {
+        map.current.getCanvas().style.cursor = ''
+        popup.remove()
       })
     })
   })
