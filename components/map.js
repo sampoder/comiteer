@@ -228,7 +228,7 @@ export default function Map({
           onClick={() => {
             map.current.easeTo({
               center: [longitude, latitude],
-              zoom: 15,
+              zoom: 14.4,
             })
           }}
           sx={{}}
