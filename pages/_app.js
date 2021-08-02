@@ -106,6 +106,7 @@ const App = ({ Component, pageProps }) => {
         <meta name="msapplication-TileColor" content="#2196f3" />
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="theme-color" content="#2196f3" />
+        <title>Comiteer</title>
       </Head>
       <Login />
       <div style={{ position: 'relative' }}>
