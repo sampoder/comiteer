@@ -17,7 +17,7 @@
     "better-sqlite3": "^7.4.3",
     "framer-motion": "3.10.6",
     "hdb-pool": "^0.1.6",
-    "ioredis": "^4.27.6",
+    "ioredis": "^4.27.7",
     "mapbox-gl": "^2.3.1",
     "md5": "^2.3.0",
     "mongodb": "^4.0.1",
