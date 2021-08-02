@@ -16,6 +16,7 @@ import useSWR, { mutate } from 'swr'
 import { Modal, ModalContent, ModalFooter } from '@mattjennings/react-modal'
 import { useRouter } from 'next/router'
 var sentiment = require('wink-sentiment')
+import prisma from '../lib/prisma'
 
 const fetcher = (...args) => fetch(...args).then(res => res.json())
 
@@ -417,7 +418,6 @@ export default function Messages({
 
 export async function getServerSideProps({ res, req, query }) {
   const md5 = require('md5')
-  const prisma = require('../lib/prisma')
   const session = await getSession({ req })
   console.log(session)
   if (session === null) {
