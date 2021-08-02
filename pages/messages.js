@@ -417,7 +417,7 @@ export default function Messages({
 
 export async function getServerSideProps({ res, req, query }) {
   const md5 = require('md5')
-  const prisma = require('prisma')
+  const prisma = require('../lib/prisma')
   const session = await getSession({ req })
   console.log(session)
   if (session === null) {
