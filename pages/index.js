@@ -147,7 +147,7 @@ export default function Home({
                 <Link href={`/messages?new=`+selectedItem.creatorId}>
                 <Button
                  as="div"
-                  mt={2}
+                  my={2}
                   sx={{
                     width: '100%',
                     ':focus,:hover': {
