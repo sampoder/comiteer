@@ -3,6 +3,7 @@ const withPWA = require('next-pwa')
 module.exports = withPWA(
   withMDX({
     pwa: {
+      disable: process.env.NODE_ENV === 'development',
       dest: 'public',
     },
     pageExtensions: ['js', 'mdx'],

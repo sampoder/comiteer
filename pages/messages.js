@@ -220,7 +220,7 @@ export default function Messages({
               viewingMessages.identity === undefined ? 1 : '400px 3fr',
             ]}
           >
-            <Box sx={{display: viewingMessages.identity === undefined ? 'block' : 'none',}}>
+            <Box sx={{display:[ viewingMessages.identity === undefined ? 'block' : 'none','block']}}>
               <Box
                 sx={{
                   height: 'calc(100% - 42px)',
@@ -322,16 +322,11 @@ export default function Messages({
                     alignItems: 'center',
                   }}
                 >
-                  <img
-                    src={viewingMessages.identity.image}
-                    style={{
-                      height: '36px',
-                      objectFit: 'cover',
-                      width: '36px',
-                    }}
-                  />
                   <Heading as="h1" sx={{ ml: 2 }}>
                     {viewingMessages.identity.nickname}
+                  </Heading>
+                  <Heading as="h3" sx={{ ml: 2, px: 2, bg: 'green', color: 'white', borderRadius: 3 }}>
+                    Adult
                   </Heading>
                   <Heading
                     sx={{ flexGrow: 1, textAlign: 'right' }}
