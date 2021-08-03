@@ -1,6 +1,6 @@
-<img src="https://cloud-pajz1d2xz-hack-club-bot.vercel.app/0screenshot_2021-08-01_at_5.37.33_pm.png" alt="Screenshot of Comiteer with the map" width="700px" />
+<h1 align="center"> 🙏 Comiteer </h1>
 
-# 🙏 Comiteer
+<p align="center"><img align="center" src="https://cloud-pajz1d2xz-hack-club-bot.vercel.app/0screenshot_2021-08-01_at_5.37.33_pm.png" alt="Screenshot of Comiteer with the map" width="700px"  /></p>
 
 Comiteer allows students to discover nearby volunteering opportunities that interest them and then connects them with the organisers through a safe messaging platform.
 
