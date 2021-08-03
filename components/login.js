@@ -36,39 +36,24 @@ function LoginModal(props) {
         width: '400px',
         maxWidth: '90vw',
         minHeight: '0vh',
-        mt: 4
+        mt: 4,
+        height: 'auto'
       }}
       {...props}
     >
       <ModalContent>
-        <Input
-          sx={{ mb: 3, mt: 1 }}
-          placeholder="Email"
-          type="email"
-          ref={inputRefEl}
-        />
+        Logins are currently unavailable on the public version as our
+        application to use SingPass is currently pending. Our current account is
+        limited to the demo version locally.
       </ModalContent>
       <ModalFooter>
         <Button
-          sx={{ width: '100%', bg: buttonDetails.bg }}
+          sx={{ width: '100%', bg: buttonDetails.bg, mt: 2 }}
           onClick={async () => {
-            if (validateEmail(inputRefEl.current.value)) {
-              setButtonDetails({ text: 'Sent!', bg: 'green' })
-              signIn('email', {
-                redirect: false,
-                callbackUrl: `${process.env.NEXT_PUBLIC_NEXTAUTH_URL}/api/needverify`,
-                email: inputRefEl.current.value,
-              })
-              await sleep(3000)
-              props.setLoginIsOpen(false)
-            } else {
-              setButtonDetails({ text: 'Invalid Email', bg: 'red' })
-              await sleep(3000)
-              setButtonDetails({ text: 'Send Magic Link', bg: 'blue' })
-            }
+            props.setLoginIsOpen(false)
           }}
         >
-          {buttonDetails.text}
+          OK
         </Button>
       </ModalFooter>
     </Modal>
@@ -83,7 +68,7 @@ export default function Login() {
   return (
     <>
       <LoginModal open={isLoginOpen} setLoginIsOpen={setLoginIsOpen} />
-      <Box sx={{ position: 'fixed', top: 3, right: 3, zIndex: 100 }}>
+      <Box sx={{ position: 'fixed', top: 3, right: 3, zIndex: 100, display: isLoginOpen ? 'none' : 'block' }}>
         {!loading ? (
           session != null && verifiedCheck.data != null ? (
             verifiedCheck.data.verified ? (

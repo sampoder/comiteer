@@ -144,12 +144,13 @@ export default function Home({
                 </Grid>
               )}
               {selectedItem && (
-                <Link href={`/messages?new=`+selectedItem.creatorId}>
+                
                 <Button
                  as="div"
                   my={2}
                   sx={{
                     width: '100%',
+                    bg: 'muted',
                     ':focus,:hover': {
                       boxShadow: 'elevated',
                       transform: 'scale(1)',
@@ -157,10 +158,9 @@ export default function Home({
                     },
                   }}
                 >
-                  {' '}
-                  Message The Organizer
+                  Log In To Message
                 </Button>
-                </Link>
+       
               )}
               {!selectedItem && (
                 <Box my={2}>
