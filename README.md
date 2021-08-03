@@ -1,12 +1,14 @@
-# Comiteer
+# 🙏 Comiteer
 
-Comiteer brings together nonprofit organizations and students, to share their time, resources, services and skills to enable meaningful change in our community. Our platform allows students to discover nearby volunteering opportunities that interest them and then connects them with the organisers through a safe messaging platform.
+![Screenshot of Comiteer with the map](https://cloud-pajz1d2xz-hack-club-bot.vercel.app/0screenshot_2021-08-01_at_5.37.33_pm.png)
+
+Comiteer allows students to discover nearby volunteering opportunities that interest them and then connects them with the organisers through a safe messaging platform.
 
 Comiteer won the 2021 edition of the [AWS Build On ASEAN](https://www.buildonasean2021.com). Our team consisted of Sam Poder (me!), Arsh Shrivastava & Neil Ghosh. Arsh & Neil focused on the business and presentation whilst I made the code!
 
 ### Pitch
 
-If you are curious, the following was our pitch in the finals.
+If you are curious, the following was our pitch in the finals. I know, it's very business-y lol.
 
 **Arsh:** 
 
