@@ -1,172 +1,91 @@
-# Next Theme Starter
+# Comiteer
 
-A sample [Next.js] project for getting started with [MDX] & [Theme UI].
+Comiteer brings together nonprofit organizations and students, to share their time, resources, services and skills to enable meaningful change in our community. Our platform allows students to discover nearby volunteering opportunities that interest them and then connects them with the organisers through a safe messaging platform.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Flachlanjc%2Fnext-theme-starter&repository-name=next-theme-starter)
+Comiteer won the 2021 edition of the [AWS Build On ASEAN](https://www.buildonasean2021.com). Our team consisted of Sam Poder (me!), Arsh Shrivastava & Neil Ghosh. Arsh & Neil focused on the business and presentation whilst I made the code!
 
-[next.js]: https://nextjs.org
-[mdx]: https://mdxjs.com
-[theme ui]: https://theme-ui.com
+### Pitch
 
-## Usage
+If you are curious, the following was our pitch in the finals.
 
-1. Import this repo to your coding environment of choice. [Download a zip](https://github.com/lachlanjc/next-theme-starter/archive/refs/heads/main.zip), use Create Next App (`yarn create next-app -e https://github.com/lachlanjc/next-theme-starter`),  or use the GitHub import on CodeSandbox/repl.it/Glitch/etc.
-2. `yarn` to install dependencies.
-3. `yarn dev` to start your server.
-4. Start adding your own pages & components in their respective directories.
+**Arsh:** 
 
-## Configuration
+Good evening,
 
-### Theme switcher
+Every year, a growing number of students are required to participate in volunteering activities in the community. 
 
-There’s an included example theme switcher component at `components/color-switcher.js`,
-which is included on every page through its inclusion in `pages/_app.js`.
-Feel free to change/remove it.
+This part of the curriculum holds excellent potential; yet our research shows that this potential is not being utilized for the community.
 
-### Custom theme
+85% of these students want to make a meaningful difference with their volunteering. However, only 22% of students feel that their current volunteering is worthwhile
 
-By default, a theme inspired by the [Hack Club Theme](https://theme.hackclub.com) is included.
-To edit the theme, head to `lib/theme.js`.
+For service learning to meet it’s true potential, we need to close this massive gap. Doing so would help us enable an increased amount of effective sharing of time, resources, services and skills within the community.
 
-### Running at another port
+So, how do we close this gap? 92% of these students identified finding volunteer opportunities as the key issue holding them back. 
 
-Super easy: `yarn dev -p 5000`
+Common secondary issues identified include: contacting non profit organizations and finding opportunities near where they live. 
 
-### Dependency updates
+At the same time, despite an increase in students looking to volunteer, 80% of non profit organizations report that they have not observed an increase in students getting involved with their volunteer programs.
 
-The included Dependabot configuration file means you’ll automatically get PRs
-every Monday with dependency updates. Delete `.github/dependabot.yml` to
-disable.
+Comiteer brings together nonprofit organizations and students, to share their time, resources, services and skills to enable meaningful change in our community. Our solution allows students to discover nearby volunteering opportunities that interest them and then connects them with the organisers through a safe messaging platform.
 
-### Meta tags
+We set out to make Comiteer easy and safe with the broader goal of establishing a thriving, sustainable community. We believe the best way to achieve a sustainable community is through targeting the youth as they are
 
-This template includes a `Meta` component for adding full meta tags.
-To set the defaults, open `components/meta.js` & change the default props.
+1. Full of energy and passion that a community needs to thrive, our surveys have shown that the youth have the commitment and belief required for service, with  85% of these students wanting to make a meaningful difference with their volunteering.
+2. They are a large and growing demographic, more and more schools are expanding into service learning, 50% of our surveyed students stated that service learning had only come into their schools in the past five years. This gives us the numbers for a thriving and vibrant community.
+3. Lastly, these youth are shaping what their future lives will be and by providing positive service experiences we can set up a lifelong passion for service. This lifelong passion keeps our community sustainable.
 
-It’s included in `pages/_app.js` so all pages have the default tags without
-anything per-page, but due to the `key`s included on each tag, if you render
-the component multiple times (such as once in `_app` & again on an invidual page),
-the last instance of each tag will be used, with duplicates.
+I would now hand it over to Sam, who will show you how our solution works! 
 
-If you don’t set a `description` or `image`, the relevant tags for those fields
-will be omitted.
+**Sam:** 
 
-Here’s how you use `Meta` on a page:
+So let’s jump right into Comiteer on my phone, we start at the map which is at the center of the Comiteer experience. Here we are in my local area, let’s take a look around for let’s say an education volunteering opportunity. We can filter out these results for education related opportunities. Here’s one that looks interesting, let’s click it. Hmm, I think I might give this a go. I’m going to message them. So the person I’m messaging here is “NAME”, I can tell they’re a certain age range and can be assured that their details have been verified through SingPass, which I’ll run through in a bit. We can message back and forth, and arrange a time for me to get involved.
 
-```js
-import Meta from '../components/meta'
+Now let’s head back home this time on the web version, to take a deep dive into the key focuses of this prototype: discoverability and safety.
 
-const AboutPage = () => (
-  <>
-    <Meta
-      title="About" // page title
-      description="About our nonprofit." // page description
-      image="https://yourdomain.com/special-card.png" // large summary card image URL
-    />
-    {/* … */}
-  </>
-)
+Discoverability all focuses around the map and three themes: localisation, visual markers and speed.
 
-export default Page
-```
+Localisation is important for us as it provides the user with a familiar interface that they can understand and relate with. An example of this is this handy button in the bottom right which allows us to focus the map on their current location. This allows the user to focus on the opportunities around them.
 
-(The default props are included on the component instead of `_app.js` so you
-don’t have to re-include all the props on each page.)
+Secondly, visual markers. We heard a lot from users about not enjoying UIs that overload them with text, so we stripped back on the text and focused on the visuals. For example, we gave each category a distinct colour with the key on the side that makes every marker on the map more recognisable.
 
-You can also pass children to `Meta` to quickly include custom tags inside the
-[Next.js `Head`](https://nextjs.org/docs/api-reference/next/head).
+Lastly, speed. We believe that users should be able to find opportunities fast. Just take a look at how fast search is here, we’ve optimised our app through dynamic loading and careful state management set up to make sure the user has the best experience. In fact, when using our platform 75% of students found an opportunity that interested them within three minutes.
 
-### Icons
+This focus on the discoverability process is the reason why 89% of our target market found the platform easy to use when testing it.
 
-No iconsets are included with this starter, but a few I recommend:
+As I alluded to earlier, security and safety is critical for our users. We take a three prong approach to safety: protect, educate and act.
 
-- [react-bootstrap-icons](https://github.com/ismamz/react-bootstrap-icons)
-- [react-ionicons](https://github.com/zamarrowski/react-ionicons)
-- [react-feather](https://github.com/feathericons/react-feather)
-- [@geist-ui/react-icons](https://github.com/geist-org/react-icons)
-- [@hackclub/icons](https://github.com/hackclub/icons)
+Let’s begin with protection. We protect our user base by requiring all new users to verify their identity including name and age through SingPass as is demonstrated on screen through a new user logging in. This filters our spam bots and potential bad actors from entering the platform. SingPass is a government platform widely used in Singapore, and the most accurate method of identity verification in Singapore. We also protect the platform from spam posting, by requiring a manual review for each posting.
 
-### Adding analytics
+Now let’s transition to educate, being targeted towards the youth we know that everyone has room to grow and learn. When messaging, we prompt users who are consistently being negative in their messages to evaluate their messages and rethink how they are communicating as shown on screen.
 
-I recommend [Fathom Analytics](https://usefathom.com/ref/NXBJA2) or
-[Plausible.io](https://plausible.io)
-for simple, privacy-focused analytics.
+Lastly, action. Unfortunately, we can not fully rule out bad actors on the platform. In these cases, we make reporting users as easy as one-two-three. As you can see you can report them by clicking this icon here, quickly fill out the form and then get redirected to this page in which you can monitor the status of your report, keeping the process open and transparent for the user.
 
-<details>
-<summary>Example `_app` with Fathom (requires `fathom-client`)</summary>
+It’s critical that our users are safe and this three prong approach ensures that.
 
-```js
-import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import Head from 'next/head'
+AWS is at the core of our application, we host our statically generated Next.js frontend on AWS Amplify. The frontend uses Theme UI & Framer Motion for styling, Mapbox to serve the client maps & SWR’s React Hooks to fetch data from our Serverless API. This serverless API is powered by Node.js and hosted with AWS Lambda Functions. It uses next-auth for authentication and Prisma to communicate with our PostgreSQL database hosted on AWS Relational Database Service. The Lambda functions work with AWS SES over SMTP to send emails and with AWS S3 to host static files. With AWS at the foundation of app, we can serve a fast experience to all users, develop new features at a rapid pace and use conserve financial resources.
 
-import Meta from '../components/meta'
-import theme from '../lib/theme'
-import { ThemeProvider } from 'theme-ui'
-import * as Fathom from 'fathom-client'
+Now I will be handing it over to Neil, who will talk about the business viability of our product.
 
-const App = ({ Component, pageProps }) => {
-  const router = useRouter()
+**Neil:**
 
-  useEffect(() => {
-    Fathom.load('YOURCODE', {
-      includedDomains: ['YOURDOMAIN.com'],
-      url: 'https://YOURSUB.YOURDOMAIN.com/script.js', // optional
-    })
-    const onRouteChangeComplete = () => Fathom.trackPageview()
-    router.events.on('routeChangeComplete', onRouteChangeComplete)
-    return () => {
-      router.events.off('routeChangeComplete', onRouteChangeComplete)
-    }
-  }, [])
+With this rapidly growing market, Comiteer has great business potential. This will be achieved through offering a product for schools. 
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Meta />
-      <Component {...pageProps} />
-    </ThemeProvider>
-  )
-}
+We intend to offer a school license for our platform that unlocks additional features for them and their students, this includes: more meticulous control over the student experience, advanced safety features, internal social features and integration with pre-existing school portals. 
 
-export default App
-```
+Schools across the country are facing similar problems as their students with service learning. We found out that 75% of educators find it difficult to arrange volunteering opportunities for their students. Furthermore, 85% would be willing to purchase a Comiteer school license to simplify this process. The median price these educators were willing to pay was $2,000 SGD for every 1,000 students. This evidently shows that there is a need for our product in the education sector, and due to its abundance of resources and funding, we will market our idea directly to them. 
 
-</details>
-<details>
-<summary>Example `_app` with Plausible (requires `next-plausible`)</summary>
+This would also provide us with a sustainable stream of revenue to fund our platform upkeep and the development of new features. Most importantly, it will mean that we can continue to connect students with non profit organisations without having to charge them.
 
-```js
-import * as React from 'react'
-import Head from 'next/head'
+Going beyond our current prototype, we plan to build a dedicated dashboard for organisations to use when posting opportunities. We will also provide more moderation tools to keep our users safe and add more functionality to our chat system with Amazon Chime. Additionally, we will expand our product into supporting one time volunteering opportunities and give organisers the tools they need to run these events.
 
-import PlausibleProvider from 'next-plausible'
-import theme from '../lib/theme'
-import { ThemeProvider } from 'theme-ui'
-import Meta from '../components/meta'
+Lastly, we intend to build partnerships with preferred organisations that will be verified further. This will add additional legitimacy and offer Comiteer-exclusive opportunities to make the product more valuable.
 
-const App = ({ Component, pageProps }) => {
-  return (
-    <PlausibleProvider domain="YOURDOMAIN.com">
-      <ThemeProvider theme={theme}>
-        <Meta />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </PlausibleProvider>
-  )
-}
+To conclude,
 
-export default App
-```
+* We’ve got a large demographic full of passion and potential that is currently not being provided with the resources they need to reach their potential in the community.
+* We’ve got a fast and safe product that has proven user satisfaction.
+* Lastly, a market of schools that are willing to invest in the platform to keep it running.
 
-</details>
+If you’re looking to establish **sustainable** and **thriving** communities around volunteering, it's time to commit to Comiteer! 
 
-## Deployment
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https%3A%2F%2Fgithub.com%2Flachlanjc%2Fnext-theme-starter&repo-name=next-theme-project)
-
-I highly recommend using [Vercel](https://vercel.com) for deployment. It requires no
-configuration, is totally free for personal projects, and supports all the features
-of Next.js with the best performance. Refer to [their documentation](https://vercel.com/docs#deploy-an-existing-project)
-for more details. 
-
-Alternatively, you can deploy your site on [Netlify](https://netlify.com), which is also free but requires configuration (refer to [their documentation](https://docs.netlify.com/configure-builds/common-configurations/#next-js)) & doesn’t support every feature of Next.js (fallback pages & image optimization, among others).
+Now we will open the floor for a Q&A Session
