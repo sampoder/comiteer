@@ -1616,10 +1616,10 @@
   resolved "https://registry.yarnpkg.com/@mattjennings/react-modal-stack/-/react-modal-stack-1.0.2.tgz#cc85c0981aa3b3b63306717f6ceb058418139fb2"
   integrity sha512-/5ZqmEXZolHu/i1FfOqXCPZ4qbgst6UyzND1uK4v2rztDCA3wE864QI8jdML05VTk2NvsRkhMUuSWSjK9QrvNg==
 
-"@mattjennings/react-modal@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@mattjennings/react-modal/-/react-modal-1.0.2.tgz#2913c43beb9969ce011e17755667c61253d18ddb"
-  integrity sha512-l6MXPnGUqE3YdZaQ+wCeiA4oBqIYfOGkWZWzg5bSBGHQlQn/SGGUg6GLxtadYoAkewsDlDozLTH0cF7b8R5LrQ==
+"@mattjennings/react-modal@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@mattjennings/react-modal/-/react-modal-1.0.3.tgz#f796c5238c6d799290edee2884f377aa2bc2902e"
+  integrity sha512-k3Kyhrt35fshWXa7jqAWCivf/aM5T5oM1kxc9zCsb3W87arRtt0s1pY43hQeV149OV3Wh9Tn+2xlgAq+Tsj0HQ==
   dependencies:
     "@theme-ui/match-media" "^0.3.1"
     react-scrolllock "^5.0.1"

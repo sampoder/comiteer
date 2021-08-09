@@ -8,7 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
-    "@mattjennings/react-modal": "^1.0.2",
+    "@mattjennings/react-modal": "^1.0.3",
     "@mattjennings/react-modal-stack": "^1.0.2",
     "@mdx-js/loader": "^1.6.22",
     "@next/mdx": "^11.0.1",
