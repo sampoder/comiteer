@@ -20,7 +20,7 @@
     "ioredis": "^4.27.6",
     "mapbox-gl": "^2.4.0",
     "md5": "^2.3.0",
-    "mongodb": "^4.0.1",
+    "mongodb": "^4.5.0",
     "mssql": "^7.2.0",
     "myinfo-connector-nodejs": "^0.0.9",
     "mysql": "^2.18.1",
