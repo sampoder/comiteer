@@ -8,7 +8,7 @@ Comiteer won the 2021 edition of the [AWS Build On ASEAN](https://www.buildonase
 
 ### Pitch
 
-If you are curious, the following was our pitch in the finals. I know, it's very business-y lol.
+If you are curious, the following was our pitch in the finals. I know, it's very business-y.
 
 **Arsh:** 
 
