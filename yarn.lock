@@ -3189,7 +3189,7 @@ debug@2:
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4, debug@^4.1.1, debug@^4.3.1:
+debug@4, debug@^4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.2.tgz#f0a49c18ac8779e31d4a0c6029dfb76873c7428b"
   integrity sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==
@@ -3200,13 +3200,6 @@ debug@^3.2.6:
   version "3.2.7"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.2.7.tgz#72580b7e9145fb39b6676f9c5e5fb100b934179a"
   integrity sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==
-  dependencies:
-    ms "^2.1.1"
-
-debug@^4.1.0:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
-  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
   dependencies:
     ms "^2.1.1"
 
@@ -6985,10 +6978,10 @@ supercluster@^7.1.3:
   dependencies:
     kdbush "^3.0.0"
 
-superjson@^1.7.4:
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.7.4.tgz#76ba9091e74c93ce6f61914b58854ee0b1ba37b9"
-  integrity sha512-A6DYTe04+x4L9NPywHeGZNy6/gLe8qqKCwhEfTH9M4eXpTjiTsF83JZ3j4hwXx1ogRb4779nWxsDlJGIECOJkw==
+superjson@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/superjson/-/superjson-1.8.2.tgz#6245e598baeba029902d0cdc28ceaaad2ee1e1b7"
+  integrity sha512-gVZEvpmOC11DfnLtm6i/iUNxaozU5ZI4tM7WsBsXmFJAnwj8KQPRQAYfQ4iPMquKNrG6un9VfyNf0F0iD2IWGQ==
   dependencies:
     debug "^4.3.1"
     lodash.clonedeep "^4.5.0"
